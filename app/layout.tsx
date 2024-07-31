@@ -20,7 +20,12 @@ export default function RootLayout({
       <body
         className={`mx-auto max-w-screen-xl bg-background/5 ${poppins.className}`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </body>
