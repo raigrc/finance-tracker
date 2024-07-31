@@ -15,10 +15,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { register } from "@/actions/register";
+import FormSuccess from "@/components/auth/form-success";
+import FormError from "@/components/auth/form-error";
 
 const RegisterForm = () => {
+  const [success, setSuccess] = useState<string | undefined>();
+  const [error, setError] = useState<string | undefined>();
+
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -32,7 +37,14 @@ const RegisterForm = () => {
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     startTransition(() => {
-      register(values);
+      register(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+
+        if (data?.success) {
+          form.reset();
+        }
+      });
     });
   };
 
@@ -41,7 +53,6 @@ const RegisterForm = () => {
       headerLabel="Register an account"
       backButtonHref="/login"
       backButtonLabel="Already have an account?"
-      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -94,6 +105,8 @@ const RegisterForm = () => {
               )}
             />
           </div>
+          <FormSuccess message={success} />
+          <FormError message={error} />
           {isPending ? (
             <Button
               type="submit"

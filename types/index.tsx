@@ -14,3 +14,7 @@ export interface BackButtonProps {
   label: string;
   href: string;
 }
+
+export interface RegisterMessageProps {
+  message: string | undefined;
+}
