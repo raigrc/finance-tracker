@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
+import { login } from "@/actions/login";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -29,7 +30,9 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
+    startTransition(() => {
+      login(values);
+    });
   };
 
   return (
@@ -49,7 +52,11 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@gmail.com" {...field} />
+                    <Input
+                      placeholder="example@gmail.com"
+                      {...field}
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -62,16 +69,32 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" {...field} disabled={isPending} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit" className="w-full" size="lg">
-            Login
-          </Button>
+          {isPending ? (
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending}
+            >
+              Logging in...
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending}
+            >
+              Login
+            </Button>
+          )}
         </form>
       </Form>
     </CardWrapper>

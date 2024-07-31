@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTransition } from "react";
+import { register } from "@/actions/register";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -30,12 +31,14 @@ const RegisterForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    console.log(values);
+    startTransition(() => {
+      register(values);
+    });
   };
 
   return (
     <CardWrapper
-      headerLabel="Create an account"
+      headerLabel="Register an account"
       backButtonHref="/login"
       backButtonLabel="Already have an account?"
       showSocial
@@ -50,7 +53,11 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Input
+                      placeholder="John Doe"
+                      {...field}
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -63,7 +70,11 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@gmail.com" {...field} />
+                    <Input
+                      placeholder="example@gmail.com"
+                      {...field}
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -76,16 +87,32 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" {...field} disabled={isPending} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit" className="w-full" size="lg">
-            Login
-          </Button>
+          {isPending ? (
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending}
+            >
+              Creating account...
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending}
+            >
+              Create an account
+            </Button>
+          )}
         </form>
       </Form>
     </CardWrapper>
