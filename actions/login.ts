@@ -13,5 +13,11 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
   const { email, password } = formData.data;
 
+  await signIn("credentials", {
+    email,
+    password,
+    redirectTo: "/dashboard"
+  });
+
   return { success: "Success Login!" };
 };
