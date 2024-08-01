@@ -11,11 +11,9 @@ export const RegisterSchema = z.object({
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
-    .max(8, { message: "Password must be less than 32 characters" })
-    .regex(/[A-Z]/, { message: "Password must contain at least 1 uppercase" })
-    .regex(/[a-z]/, { message: "Password must contain at least 1 lowercase" })
-    .regex(/[0-9]/, { message: "Password must contain at least one number" })
-    .regex(/[\W_]/, {
-      message: "Password must contain at least one special character",
-    }),
+    .max(32, { message: "Password must be less than 32 characters" })
+    .regex(/[A-Z]/, "Password must contain at least 1 uppercase")
+    .regex(/[a-z]/, "Password must contain at least 1 lowercase")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[\W_]/, "Password must contain at least one special character"),
 });
