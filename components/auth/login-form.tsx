@@ -19,8 +19,10 @@ import { useState, useTransition } from "react";
 import { login } from "@/actions/login";
 import FormSuccess from "./form-success";
 import FormError from "./form-error";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -38,6 +40,8 @@ const LoginForm = () => {
       login(values).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
+
+        router.push("/dashboard");
 
         if (data?.error) form.resetField("password");
       });

@@ -11,11 +11,21 @@ export const getUserByEmail = async (email: string) => {
 };
 
 export const getUserById = async (id: string) => {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       id,
     },
   });
 
   return user;
+};
+
+export const getSessionByUserId = async (id: string) => {
+  const session = await prisma.session.findFirst({
+    where: {
+      userId: id
+    },
+  });
+
+  return session;
 };

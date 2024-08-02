@@ -2,7 +2,10 @@
 
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
+import { AuthError } from "next-auth";
 import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+import { useSession } from "next-auth/react";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const formData = LoginSchema.safeParse(values);
@@ -13,11 +16,24 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
   const { email, password } = formData.data;
 
-  await signIn("credentials", {
-    email,
-    password,
-    redirectTo: "/dashboard"
-  });
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/dashboard",
+    });
 
-  return { success: "Success Login!" };
+    return { success: "Success Login!" };
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin": {
+          return { error: "Invalid credentials!" };
+        }
+        default: {
+          return { error: "Something went wrong!" };
+        }
+      }
+    }
+  }
 };

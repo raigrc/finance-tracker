@@ -1,8 +1,17 @@
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+const AuthLayout = async ({
+  children,
+}: Readonly<{ children: React.ReactNode }>) => {
+  const session = await auth();
+
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center justify-center">
       {children}
     </div>
   );
