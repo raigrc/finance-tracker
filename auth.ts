@@ -23,8 +23,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   ...authConfig,
+  pages: {
+    signIn: "/login",
+    error: "/error",
+  },
   callbacks: {
-    async session({ session, token, user }) {
+    signIn: async ({ user, account }) => {
+      if (account?.provider !== "credentials") return true;
+
+      return true;
+    },
+    async session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;
       }

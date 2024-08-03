@@ -4,8 +4,6 @@ import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-import { useSession } from "next-auth/react";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const formData = LoginSchema.safeParse(values);

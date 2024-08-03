@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {status === "loading" ? <span>Loading...</span> : session?.expires}
+      {status === "loading" ? <span>Loading...</span> : JSON.stringify(session)}
       <form action={logout}>
         <button type="submit">Signout</button>
       </form>

@@ -6,7 +6,7 @@ const FormError = ({ message }: RegisterMessageProps) => {
   if (!message) return null;
 
   return (
-    <div className="flex items-center rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+    <div className="flex items-center gap-x-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
       <FaTriangleExclamation className="fill-destructive" />
       {message}
     </div>
