@@ -1,19 +1,24 @@
 "use client";
 
 import { logout } from "@/actions/logout";
-import { auth, signOut } from "@/auth";
+import AdminDashboard from "@/components/user/admin/dashboard";
+import UserDashboard from "@/components/user/user/dashboard";
 import { useSession } from "next-auth/react";
-import React from "react";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
 
+  const signOut = () => {
+    logout();
+  };
+
   return (
     <div>
-      {status === "loading" ? <span>Loading...</span> : JSON.stringify(session)}
-      <form action={logout}>
-        <button type="submit">Signout</button>
-      </form>
+      {session?.user.role === "ADMIN" && <AdminDashboard />}
+      {session?.user.role === "USER" && <UserDashboard />}
+      <button type="submit" onClick={signOut}>
+        Signout
+      </button>
     </div>
   );
 };

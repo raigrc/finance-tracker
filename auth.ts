@@ -12,9 +12,9 @@ declare module "next-auth" {
       role: UserRole;
     } & DefaultSession["user"];
   }
-  interface User {
-    role: UserRole;
-  }
+  // interface User {
+  //   role: UserRole;
+  // }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -28,79 +28,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: "/error",
   },
   callbacks: {
-    signIn: async ({ user, account }) => {
-      if (account?.provider !== "credentials") return true;
-
-      return true;
-    },
     async session({ session, token }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
-      }
-
-      if (session.user && token.role) {
-        session.user.role = token.role as UserRole;
-      }
-
-      session.expires = token.expires as Date & string;
-
-      console.log({ session });
-
+      session.user = token as any;
       return session;
     },
     async jwt({ token, user }) {
-      const now = new Date();
-      const expires = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        23,
-        59,
-        59,
-      );
-      if (user) {
-        token.sub = user.id;
-        token.role = user.role;
-
-        console.log({ expires });
-
-        token.iat = Math.floor(Date.now() / 1000);
-        token.exp = Math.floor(expires.getTime() / 1000);
-
-        if (!token.sub) return token;
-
-        const sessionToken = uuidv4();
-        const sessionTokenData = await getSessionByUserId(token.sub);
-
-        if (sessionTokenData) {
-          await prisma.session.delete({
-            where: {
-              sessionToken: sessionTokenData.sessionToken,
-            },
-          });
-        }
-
-        await prisma.session.create({
-          data: {
-            sessionToken,
-            userId: token.sub,
-            expires,
-          },
-        });
-
-        token.expires = expires;
-
-        if (token.exp && Date.now() / 1000 > token.exp) {
-          // await prisma.session.deleteMany({});
-          return {};
-        }
-
-        console.log({ userData: user });
-      }
-
-      console.log({ token, expires });
-
-      return token;
+      return { ...token, ...user };
     },
   },
 });
