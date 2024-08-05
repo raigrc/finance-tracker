@@ -1,3 +1,5 @@
+import { IconType } from "react-icons/lib";
+
 export interface AuthHeaderProps {
   label: string;
 }
@@ -17,4 +19,10 @@ export interface BackButtonProps {
 
 export interface RegisterMessageProps {
   message: string | undefined;
+}
+
+export interface CardDashboardProps {
+  headerTitle: string;
+  headerIcon: React.ReactNode;
+  content: string;
 }

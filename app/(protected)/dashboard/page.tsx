@@ -16,9 +16,6 @@ const Dashboard = () => {
     <div>
       {session?.user.role === "ADMIN" && <AdminDashboard />}
       {session?.user.role === "USER" && <UserDashboard />}
-      <button type="submit" onClick={signOut}>
-        Signout
-      </button>
     </div>
   );
 };
