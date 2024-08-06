@@ -20,7 +20,7 @@ export default function RootLayout({
     <SessionProvider>
       <html lang="en">
         <body
-          className={`mx-auto max-w-screen-xl bg-background/5 ${poppins.className}`}
+          className={poppins.className}
         >
           <ThemeProvider
             attribute="class"

@@ -33,11 +33,18 @@ const UserButton = () => {
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-auto">
+        <DropdownMenuContent>
+          <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-xs text-slate-400">
+            {session?.user.email}
+          </DropdownMenuLabel>
+
+          <DropdownMenuSeparator />
+
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>
-            <IoExitOutline size={16} className="mr-2"/>
+            <IoExitOutline size={16} className="mr-2" />
             <LogoutButton />
           </DropdownMenuItem>
         </DropdownMenuContent>

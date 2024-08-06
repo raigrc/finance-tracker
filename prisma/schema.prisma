@@ -19,15 +19,18 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  email         String?       @unique
   image         String?
   password      String?
-  role          UserRole  @default(USER)
+  role          UserRole      @default(USER)
+  totalMoney    Float?
   accounts      Account[]
   sessions      Session[]
+  Transaction   Transaction[]
+  Budget        Budget[]
+  emailVerified DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -66,11 +69,41 @@ model Session {
   updatedAt DateTime @updatedAt
 }
 
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String
-  expires    DateTime
+model Transaction {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String          @db.ObjectId
+  amount      Float
+  category    String
+  type        TransactionType
+  description String?
+  date        DateTime        @default(now())
 
-  @@unique([identifier, token])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Budget {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String @db.ObjectId
+  totalAmount       Float
+  needsPercentage   Float
+  wantsPercentage   Float
+  savingsPercentage Float
+  needsAmount       Float
+  wantsAmount       Float
+  savingsAmount     Float
+  month             Int
+  year              Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }

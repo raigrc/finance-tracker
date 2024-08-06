@@ -24,5 +24,16 @@ export interface RegisterMessageProps {
 export interface CardDashboardProps {
   headerTitle: string;
   headerIcon: React.ReactNode;
-  content: string;
+  content: string | number;
+}
+
+export interface UserHeaderProps {
+  title: string;
+}
+
+export interface BudgetSummary {
+  totalAmount: number;
+  totalSavings: number;
+  totalNeeds: number;
+  totalWants: number;
 }
