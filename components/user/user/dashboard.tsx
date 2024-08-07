@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import Header from "../header";
 import DashboardHeadButtons from "./dashboard-head-buttons";
 import TransactionButton from "../transaction-form";
-import BudgetButton from "../budget-form";
+import BudgetForm from "../budget-form";
 
 const UserDashboard = () => {
   const formatCurrency = (amount: number | undefined) => {
@@ -32,29 +32,37 @@ const UserDashboard = () => {
         <CardDashboard
           headerTitle="Total Money"
           headerIcon={<TbMoneybag />}
-          content={`${formatCurrency(session?.user.totalMoney)}`}
+          content={`${formatCurrency(session?.user.budget?.totalAmount)}`}
+          footerTitle="Overall Money"
+          footerValue=""
         />
         <CardDashboard
           headerTitle={`Total Needs`}
           headerIcon={<FaHouse />}
           content={`${formatCurrency(session?.user.budget?.totalNeeds)}`}
+          footerTitle="Total Spending"
+          footerValue=""
         />
         <CardDashboard
           headerTitle={`Total Want`}
           headerIcon={<FaGamepad />}
           content={`${formatCurrency(session?.user.budget?.totalWants)}`}
+          footerTitle="Total Spending"
+          footerValue=""
         />
         <CardDashboard
           headerTitle={`Total Savings`}
           headerIcon={<MdOutlineSavings />}
           content={`${formatCurrency(session?.user.budget?.totalSavings)}`}
+          footerTitle="Total Spending"
+          footerValue=""
         />
       </div>
       <div className="flex items-center justify-between">
         <DashboardHeadButtons />
         <div className="flex items-center gap-x-2">
           <TransactionButton />
-          <BudgetButton />
+          <BudgetForm />
         </div>
       </div>
 

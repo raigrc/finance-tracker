@@ -3,12 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import authConfig from "@/auth.config";
 import { Budget, UserRole } from "@prisma/client";
-import {
-  getBudgetByUserId,
-  getSessionByUserId,
-  getUserById,
-} from "./data/user";
-import { v4 as uuidv4 } from "uuid";
+import { getAllBudgetByUserId, getTotalBudgetByUserId } from "./data/user";
 import { BudgetSummary } from "./types";
 
 declare module "next-auth" {
@@ -17,6 +12,7 @@ declare module "next-auth" {
       role: UserRole;
       totalMoney: GLfloat;
       budget?: BudgetSummary;
+      allbudgets?: Budget[];
     } & DefaultSession["user"];
   }
   // interface User {
@@ -40,10 +36,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (!token.sub) return session;
 
-      const userBudget = await getBudgetByUserId(token.sub);
+      const userBudget = await getTotalBudgetByUserId(token.sub);
       session.user.budget = userBudget as BudgetSummary;
 
-      console.log(session);
+      const budgets = await getAllBudgetByUserId(token.sub);
+      session.user.allbudgets = budgets;
+
+      console.log({ session });
       return session;
     },
     async jwt({ token, user }) {

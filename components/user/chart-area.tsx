@@ -16,37 +16,50 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { getMonthName } from "@/lib/get-month-name";
 
-const chartData = [
-  { month: "January", needs: 186, wants: 80, savings: 100 },
-  { month: "February", needs: 90, wants: 200, savings: 120 },
-  { month: "March", needs: 237, wants: 120, savings: 60 },
-  { month: "April", needs: 73, wants: 190, savings: 120 },
-  { month: "May", needs: 209, wants: 130, savings: 180 },
-  { month: "June", needs: 214, wants: 140, savings: 150 },
-];
-
-const chartConfig = {
-  needs: {
-    label: "Needs",
-    color: "hsl(var(--chart-1))",
-  },
-  wants: {
-    label: "Wants",
-    color: "hsl(var(--chart-2))",
-  },
-  savings: {
-    label: "Savings",
-    color: "hsl(var(--chart-3))",
-  },
-} satisfies ChartConfig;
 const ChartArea = () => {
+  const { data: session } = useSession();
+  const [chartData, setChartData] = useState<any>([]);
+
+  useEffect(() => {
+    const allBudget = session?.user.allbudgets;
+
+    if (!allBudget) return;
+
+    const transformedData = allBudget.map((budget) => ({
+      month: getMonthName(budget.month),
+      needs: budget.needsAmount,
+      wants: budget.wantsAmount,
+      savings: budget.savingsAmount,
+    }));
+
+    setChartData(transformedData);
+
+  }, [session])
+
+  const chartConfig = {
+    needs: {
+      label: "Needs",
+      color: "hsl(var(--chart-1))",
+    },
+    wants: {
+      label: "Wants",
+      color: "hsl(var(--chart-2))",
+    },
+    savings: {
+      label: "Savings",
+      color: "hsl(var(--chart-3))",
+    },
+  } satisfies ChartConfig;
   return (
-    <Card className="w-2/3 h-full">
+    <Card className="h-full w-2/3">
       <CardHeader>
         <CardTitle>Area Chart - Stacked</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total money for the last 6 months
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -85,7 +98,7 @@ const ChartArea = () => {
               fill="var(--color-wants)"
               fillOpacity={0.4}
               stroke="var(--color-wants)"
-              stackId="a"
+              stackId="b"
             />
             <Area
               dataKey="savings"
@@ -93,7 +106,7 @@ const ChartArea = () => {
               fill="var(--color-savings)"
               fillOpacity={0.4}
               stroke="var(--color-savings)"
-              stackId="a"
+              stackId="c"
             />
           </AreaChart>
         </ChartContainer>

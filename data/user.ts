@@ -32,7 +32,9 @@ export const getSessionByUserId = async (id: string) => {
   return session;
 };
 
-export const getBudgetByUserId = async (id: string): Promise<BudgetSummary> => {
+export const getTotalBudgetByUserId = async (
+  id: string,
+): Promise<BudgetSummary> => {
   const budgets = await prisma.budget.findMany({
     where: {
       userId: id,
@@ -56,5 +58,24 @@ export const getBudgetByUserId = async (id: string): Promise<BudgetSummary> => {
     0,
   );
 
-  return { totalAmount, totalSavings, totalNeeds, totalWants };
+  return { ...budgets, totalAmount, totalSavings, totalNeeds, totalWants };
+};
+
+export const getAllBudgetByUserId = async (id: string) => {
+  const allBudget = await prisma.budget.findMany({
+    where: {
+      userId: id,
+    },
+    orderBy: [{ year: "asc" }, { month: "asc" }],
+  });
+  return allBudget;
+};
+
+export const getBudgetThisMonth = async (month: number) => {
+  const budgetThisMonth = await prisma.budget.findFirst({
+    where: {
+      month,
+    },
+  });
+  return budgetThisMonth;
 };

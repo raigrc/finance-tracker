@@ -21,10 +21,16 @@ export interface RegisterMessageProps {
   message: string | undefined;
 }
 
+export interface BudgetMessageProps {
+  message: string | undefined;
+}
+
 export interface CardDashboardProps {
   headerTitle: string;
   headerIcon: React.ReactNode;
   content: string | number;
+  footerTitle: string;
+  footerValue: string | number;
 }
 
 export interface UserHeaderProps {

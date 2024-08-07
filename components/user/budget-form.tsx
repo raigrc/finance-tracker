@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,34 +33,39 @@ import { BudgetSchema, TransactionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { budget } from "@/actions/budget";
 import { useSession } from "next-auth/react";
+import BudgetSuccess from "./budget-success";
+import BudgetError from "./budget-error";
+import { useRouter } from "next/router";
 
-const BudgetButton = () => {
+const BudgetForm = () => {
   const { data: session } = useSession();
+
+  const [isPending, startTransition] = useTransition();
+
+  const [budgetSuccess, setBudgetSuccess] = useState<string | undefined>();
+  const [budgetError, setBudgetError] = useState<string | undefined>();
+
   const form = useForm<z.infer<typeof BudgetSchema>>({
     resolver: zodResolver(BudgetSchema),
     defaultValues: {
       userId: session?.user.id,
-      totalAmount: undefined,
+      totalAmount: 0,
       needsPercentage: 50,
       wantsPercentage: 30,
       savingsPercentage: 20,
-      needsAmount: 0,
-      wantsAmount: 0,
-      savingsAmount: 0,
       month: new Date().getMonth() + 1,
       year: new Date(Date.now()).getFullYear(),
     },
   });
 
   const handleSubmit = (values: z.infer<typeof BudgetSchema>) => {
-    const budgetData = {
-      ...values,
-      needsAmount: (values.totalAmount * values.needsPercentage) / 100,
-      wantsAmount: (values.totalAmount * values.wantsPercentage) / 100,
-      savingsAmount: (values.totalAmount * values.savingsPercentage) / 100,
-    };
-
-    budget(budgetData);
+    startTransition(() => {
+      budget(values).then((data) => {
+        setBudgetSuccess(data?.success);
+        setBudgetError(data?.error);
+        form.reset();
+      });
+    });
   };
   return (
     <Dialog>
@@ -85,7 +92,7 @@ const BudgetButton = () => {
                           Needs <span className="text-gray-400">(%)</span>
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input disabled={isPending} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -100,7 +107,7 @@ const BudgetButton = () => {
                           Wants <span className="text-gray-400">(%)</span>
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input disabled={isPending} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -115,7 +122,7 @@ const BudgetButton = () => {
                           Savings <span className="text-gray-400">(%)</span>
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input disabled={isPending} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -133,7 +140,7 @@ const BudgetButton = () => {
                         Amount of Money
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input disabled={isPending} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,7 +156,8 @@ const BudgetButton = () => {
                       <FormLabel>Month</FormLabel>
                       <FormControl>
                         <Select
-                          value={String(field.value)}
+                          disabled={isPending}
+                          // value={String(field.value)}
                           onValueChange={(value) =>
                             field.onChange(Number(value))
                           }
@@ -187,6 +195,7 @@ const BudgetButton = () => {
                       <FormLabel>Year</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={isPending}
                           value={String(field.value)}
                           onValueChange={(value) => field.onChange(value)}
                         >
@@ -212,16 +221,28 @@ const BudgetButton = () => {
                   )}
                 />
               </div>
-              <Button className="w-full" size="lg" type="submit">
-                Add Budget
-              </Button>
+              <BudgetSuccess message={budgetSuccess} />
+              <BudgetError message={budgetError} />
+              {isPending ? (
+                <Button disabled className="w-full" size="lg" type="submit">
+                  Adding Budget...
+                </Button>
+              ) : (
+                <Button
+                  disabled={isPending}
+                  className="w-full"
+                  size="lg"
+                  type="submit"
+                >
+                  Add Budget
+                </Button>
+              )}
             </form>
           </Form>
         </DialogHeader>
-        {/* <DialogDescription>This is Description</DialogDescription> */}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default BudgetButton;
+export default BudgetForm;

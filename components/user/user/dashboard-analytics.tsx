@@ -1,7 +1,6 @@
 import React from "react";
 import ChartArea from "../chart-area";
 import TransactionArea from "../transactions";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const DashboardAnalytics = () => {

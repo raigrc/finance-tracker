@@ -87,6 +87,7 @@ model Transaction {
 model Budget {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   userId            String @db.ObjectId
+  overallMoney      Float
   totalAmount       Float
   needsPercentage   Float
   wantsPercentage   Float
