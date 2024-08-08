@@ -3,25 +3,15 @@ import { FaGamepad, FaHouse, FaUser } from "react-icons/fa6";
 import { TbMoneybag } from "react-icons/tb";
 import NavBar from "@/components/user/user/navbar";
 import { MdOutlineSavings } from "react-icons/md";
-import CurrentDateTime from "@/components/current-date-time";
 import { useSession } from "next-auth/react";
 import DashboardAnalytics from "./dashboard-analytics";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import Header from "../header";
 import DashboardHeadButtons from "./dashboard-head-buttons";
 import TransactionButton from "../transaction-form";
 import BudgetForm from "../budget-form";
+import { formatCurrency } from "@/lib/format-currency";
 
 const UserDashboard = () => {
-  const formatCurrency = (amount: number | undefined) => {
-    if (amount === undefined) return "₱0.00"; // Default value if amount is undefined
-    return new Intl.NumberFormat("fil-PH", {
-      style: "currency",
-      currency: "PHP",
-    }).format(amount);
-  };
 
   const { data: session } = useSession();
   return (

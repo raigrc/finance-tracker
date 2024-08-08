@@ -9,13 +9,18 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { RecentTransactionProps } from "@/types";
 
-const TransactionArea = () => {
+const RecentTransactions = ({
+  title,
+  description,
+  width,
+}: RecentTransactionProps) => {
   return (
-    <Card className="h-full w-1/3">
+    <Card className={`w-${width} h-full`}>
       <CardHeader>
-        <CardTitle>Recent Transactions</CardTitle>
-        <CardDescription>Showing 10 recent transactions</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent></CardContent>
       <CardFooter>
@@ -27,4 +32,4 @@ const TransactionArea = () => {
   );
 };
 
-export default TransactionArea;
+export default RecentTransactions;

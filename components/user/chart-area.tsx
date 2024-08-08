@@ -19,54 +19,29 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { getMonthName } from "@/lib/get-month-name";
+import { ChartAreaProps } from "@/types";
 
-const ChartArea = () => {
-  const { data: session } = useSession();
-  const [chartData, setChartData] = useState<any>([]);
-
-  useEffect(() => {
-    const allBudget = session?.user.allbudgets;
-
-    if (!allBudget) return;
-
-    const transformedData = allBudget.map((budget) => ({
-      month: getMonthName(budget.month),
-      needs: budget.needsAmount,
-      wants: budget.wantsAmount,
-      savings: budget.savingsAmount,
-    }));
-
-    setChartData(transformedData);
-
-  }, [session])
-
-  const chartConfig = {
-    needs: {
-      label: "Needs",
-      color: "hsl(var(--chart-1))",
-    },
-    wants: {
-      label: "Wants",
-      color: "hsl(var(--chart-2))",
-    },
-    savings: {
-      label: "Savings",
-      color: "hsl(var(--chart-3))",
-    },
-  } satisfies ChartConfig;
+const ChartArea = ({
+  title,
+  description,
+  data,
+  config,
+  width,
+}: ChartAreaProps) => {
   return (
-    <Card className="h-full w-2/3">
+    <Card className={`w-${width}`}>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>
           Showing total money for the last 6 months
+          {description}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={config}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,

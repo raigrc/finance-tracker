@@ -4,7 +4,7 @@ import { BudgetSchema } from "@/schemas";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getBudgetThisMonth } from "@/data/user";
-import { revalidatePath } from "next/cache";
+import { monthNow, yearNow } from "@/lib/dates";
 
 export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   const budgetData = BudgetSchema.safeParse(values);
@@ -31,8 +31,7 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   if (existingBudgetThisMonth)
     return { error: "You already have budget this month" };
 
-  const dateNow = new Date(Date.now()).getMonth() + 1;
-  if (month < dateNow && year === 2024)
+  if (month < monthNow && yearNow)
     return { error: "Cannot add budget on the past month!" };
 
   const currentMoney = await prisma.budget.findFirst({

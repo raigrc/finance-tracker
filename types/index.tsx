@@ -1,3 +1,5 @@
+import { ChartConfig } from "@/components/ui/chart";
+import { Budget } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 
 export interface AuthHeaderProps {
@@ -42,4 +44,18 @@ export interface BudgetSummary {
   totalSavings: number;
   totalNeeds: number;
   totalWants: number;
+}
+
+export interface ChartAreaProps {
+  title: string;
+  description?: string;
+  data: Budget[];
+  config: ChartConfig;
+  width?: string;
+}
+
+export interface RecentTransactionProps {
+  title: string;
+  description?: string;
+  width?: string;
 }
