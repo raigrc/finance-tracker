@@ -107,3 +107,17 @@ export const decreaseTotalMoney = async (id: string, amount: number) => {
 
   return updateTotal;
 };
+
+export const getAllTransactionsByUserId = async (id: string) => {
+  const allTransactions = await prisma.transaction.findMany({
+    where: {
+      userId: id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 10,
+  });
+
+  return allTransactions;
+};

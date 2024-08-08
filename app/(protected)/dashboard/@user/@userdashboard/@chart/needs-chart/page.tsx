@@ -6,7 +6,9 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 const UserNeedsChart = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status == "loading") return <h1>Loading...</h1>;
   const [chartData, setChartData] = useState<any>([]);
 
   useEffect(() => {

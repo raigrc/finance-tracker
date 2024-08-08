@@ -2,7 +2,7 @@
 import BudgetForm from "@/components/user/budget-form";
 import Header from "@/components/user/header";
 import TransactionButton from "@/components/user/transaction-form";
-import DashboardHeadButtons from "@/components/user/user/dashboard-head-buttons";
+import DashboardHeadButtons from "@/components/user/dashboard-head-buttons";
 import React from "react";
 
 const UserDashboard = ({
@@ -19,7 +19,7 @@ const UserDashboard = ({
       <Header title="Dashboard" />
       {summary}
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <DashboardHeadButtons />
         <div className="space-x-3">
           <TransactionButton />
@@ -27,7 +27,7 @@ const UserDashboard = ({
         </div>
       </div>
 
-      <div className="flex space-x-3 w-full">
+      <div className="flex w-full space-x-3">
         {chart}
         {transaction}
       </div>

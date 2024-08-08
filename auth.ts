@@ -2,9 +2,10 @@ import NextAuth, { User, type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import authConfig from "@/auth.config";
-import { Budget, UserRole } from "@prisma/client";
+import { Budget, Transaction, UserRole } from "@prisma/client";
 import { getAllBudgetByUserId, getTotalBudgetByUserId } from "./data/budget";
 import { BudgetSummary } from "./types";
+import { getAllTransactionsByUserId } from "./data/transactions";
 
 declare module "next-auth" {
   interface Session {
@@ -13,6 +14,7 @@ declare module "next-auth" {
       totalMoney: GLfloat;
       budget?: BudgetSummary;
       allbudgets?: Budget[];
+      alltransactions?: Transaction[];
     } & DefaultSession["user"];
   }
   // interface User {
@@ -41,6 +43,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       const budgets = await getAllBudgetByUserId(token.sub);
       session.user.allbudgets = budgets;
+
+      const transactions = await getAllTransactionsByUserId(token.sub);
+      session.user.alltransactions = transactions;
 
       console.log({ session });
       return session;

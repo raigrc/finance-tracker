@@ -21,6 +21,8 @@ const UserButton = () => {
     logout();
   };
 
+  if (status == "loading") return <h1>Loading data...</h1>;
+
   return (
     <div className="flex items-center space-x-3">
       <DropdownMenu modal={false}>

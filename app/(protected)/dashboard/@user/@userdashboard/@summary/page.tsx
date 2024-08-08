@@ -8,6 +8,7 @@ import { formatCurrency } from "@/lib/format-currency";
 
 const UserSummary = () => {
   const { data: session } = useSession();
+
   return (
     <div className="flex justify-between space-x-3 pb-10">
       <CardDashboard

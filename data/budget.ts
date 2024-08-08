@@ -1,6 +1,5 @@
 import { BudgetSummary } from "@/types";
 import { prisma } from "@/lib/prisma";
-import { Budget } from "@prisma/client";
 
 export const getTotalBudgetByUserId = async (
   id: string,
@@ -38,6 +37,7 @@ export const getAllBudgetByUserId = async (id: string) => {
     },
     orderBy: [{ year: "asc" }, { month: "asc" }],
   });
+
   return allBudget;
 };
 
@@ -54,4 +54,17 @@ export const getBudgetThisMonth = async (
     },
   });
   return budgetThisMonth;
+};
+
+export const getBudgetCheck = async (id: string) => {
+  const allBudget = await prisma.budget.findMany({
+    where: {
+      userId: id,
+    },
+    orderBy: [{ year: "asc" }, { month: "asc" }],
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
+  return allBudget;
 };
