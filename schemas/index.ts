@@ -19,11 +19,14 @@ export const RegisterSchema = z.object({
 });
 
 export const TransactionSchema = z.object({
+  userId: z.string(),
   amount: z.coerce
     .number({ message: "Invalid format!" })
     .min(1, { message: "Amount is required" }),
   category: z.string({ message: "Category is required!" }),
   type: z.enum(["INCOME", "EXPENSE"]),
+  month: z.coerce.number().min(1).max(12),
+  year: z.coerce.number(),
   description: z.string().optional(),
 });
 

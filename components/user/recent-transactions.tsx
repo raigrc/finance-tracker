@@ -14,10 +14,10 @@ import { RecentTransactionProps } from "@/types";
 const RecentTransactions = ({
   title,
   description,
-  width,
-}: RecentTransactionProps) => {
+  className,
+}: RecentTransactionProps) => { 
   return (
-    <Card className={`w-${width} h-full`}>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

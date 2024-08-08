@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -30,20 +30,29 @@ import { z } from "zod";
 import { TransactionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transaction } from "@/actions/transaction";
+import { useSession } from "next-auth/react";
 
 const TransactionButton = () => {
+  const { data: session } = useSession();
+  const [isPending, startTransition] = useTransition();
+  
   const form = useForm<z.infer<typeof TransactionSchema>>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
+      userId: session?.user.id,
       amount: undefined,
       category: undefined,
       type: "INCOME",
+      month: new Date().getMonth() + 1,
+      year: new Date(Date.now()).getFullYear(),
       description: "",
     },
   });
 
   const handleSubmit = (values: z.infer<typeof TransactionSchema>) => {
-    transaction(values);
+    startTransition(() => {
+      transaction(values);
+    });
   };
   return (
     <Dialog>
@@ -70,6 +79,7 @@ const TransactionButton = () => {
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
+                          disabled={isPending}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select Type" />
@@ -93,7 +103,7 @@ const TransactionButton = () => {
                     <FormItem>
                       <FormLabel aria-required="true">Amount</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} disabled={isPending} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -111,6 +121,7 @@ const TransactionButton = () => {
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
+                          disabled={isPending}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select Category" />
@@ -130,21 +141,110 @@ const TransactionButton = () => {
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="month"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description <span className="text-gray-400 opacity-50">(optional)</span></FormLabel>
+                      <FormLabel>Month</FormLabel>
                       <FormControl>
-                        <Input placeholder="Ex. Salary, Grocery Shopping" {...field} />
+                        <Select
+                          disabled={isPending}
+                          // value={String(field.value)}
+                          onValueChange={(value) =>
+                            field.onChange(Number(value))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Month" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">January</SelectItem>
+                            <SelectItem value="2">February</SelectItem>
+                            <SelectItem value="3">March</SelectItem>
+                            <SelectItem value="4">April</SelectItem>
+                            <SelectItem value="5">May</SelectItem>
+                            <SelectItem value="6">June</SelectItem>
+                            <SelectItem value="7">July</SelectItem>
+                            <SelectItem value="8">August</SelectItem>
+                            <SelectItem value="9">September</SelectItem>
+                            <SelectItem value="10">October</SelectItem>
+                            <SelectItem value="11">November</SelectItem>
+                            <SelectItem value="12">December</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <Button className="w-full" size="lg" type="submit">
-                Add Transaction
-              </Button>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="year"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year</FormLabel>
+                      <FormControl>
+                        <Select
+                          disabled={isPending}
+                          value={String(field.value)}
+                          onValueChange={(value) => field.onChange(value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Year" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.from({ length: 10 }, (_, i) => (
+                              <SelectItem
+                                key={i}
+                                value={String(
+                                  new Date(Date.now()).getFullYear() + i,
+                                )}
+                              >
+                                {new Date(Date.now()).getFullYear() + i}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Description{" "}
+                        <span className="text-gray-400 opacity-50">
+                          (optional)
+                        </span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          placeholder="Ex. Salary, Grocery Shopping"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {isPending ? (
+                <Button className="w-full" size="lg" type="submit" disabled>
+                  Adding Transaction...
+                </Button>
+              ) : (
+                <Button className="w-full" size="lg" type="submit">
+                  Add Transaction
+                </Button>
+              )}
             </form>
           </Form>
         </DialogHeader>

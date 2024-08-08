@@ -6,7 +6,7 @@ const DashboardTransaction = () => {
     <RecentTransactions
       title="Recent Transactions"
       description="showing 10 recent transactions"
-      width="1/3"
+      className="w-1/3"
     />
   );
 };

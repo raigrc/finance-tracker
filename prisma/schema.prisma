@@ -76,8 +76,8 @@ model Transaction {
   category    String
   type        TransactionType
   description String?
-  month       DateTime
-  year        DateTime
+  month       Int
+  year        Int
   date        DateTime        @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

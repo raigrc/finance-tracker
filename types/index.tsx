@@ -51,11 +51,11 @@ export interface ChartAreaProps {
   description?: string;
   data: Budget[];
   config: ChartConfig;
-  width?: string;
+  className?: string | undefined;
 }
 
 export interface RecentTransactionProps {
   title: string;
   description?: string;
-  width?: string;
+  className?: string | undefined;
 }

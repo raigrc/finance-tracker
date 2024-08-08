@@ -11,25 +11,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { getMonthName } from "@/lib/get-month-name";
 import { ChartAreaProps } from "@/types";
+import { monthNow } from "@/lib/dates";
+import { getMonthName } from "@/lib/get-month-name";
 
 const ChartArea = ({
   title,
   description,
   data,
   config,
-  width,
+  className
 }: ChartAreaProps) => {
   return (
-    <Card className={`w-${width}`}>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>
@@ -94,7 +92,7 @@ const ChartArea = ({
               <IoTrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              {getMonthName(monthNow)} - {getMonthName(monthNow + 6)}
             </div>
           </div>
         </div>

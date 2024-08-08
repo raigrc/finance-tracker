@@ -8,16 +8,22 @@ const DashboardHeadButtons = () => {
   return (
     <div className="my-2 space-x-3 py-2">
       <Button variant={pathname === "/dashboard" ? "default" : "ghost"}>
-        <Link href="/">Overview</Link>
+        <Link href="/dashboard">Overview</Link>
       </Button>
-      <Button variant={pathname === "/auth" ? "default" : "ghost"}>
-        <Link href="/">Needs</Link>
+      <Button
+        variant={pathname === "/dashboard/needs-chart" ? "default" : "ghost"}
+      >
+        <Link href="/dashboard/needs-chart">Needs</Link>
       </Button>
-      <Button variant={pathname === "/auth" ? "default" : "ghost"}>
-        <Link href="/">Wants</Link>
+      <Button
+        variant={pathname === "/dashboard/wants-chart" ? "default" : "ghost"}
+      >
+        <Link href="/dashboard/wants-chart">Wants</Link>
       </Button>
-      <Button variant={pathname === "/auth" ? "default" : "ghost"}>
-        <Link href="/">Savings</Link>
+      <Button
+        variant={pathname === "/dashboard/savings-chart" ? "default" : "ghost"}
+      >
+        <Link href="/dashboard/savings-chart">Savings</Link>
       </Button>
     </div>
   );

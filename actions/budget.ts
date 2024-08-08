@@ -3,8 +3,9 @@
 import { BudgetSchema } from "@/schemas";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { getBudgetThisMonth } from "@/data/user";
+import { getBudgetThisMonth } from "@/data/budget";
 import { monthNow, yearNow } from "@/lib/dates";
+import { getCurrentTotalMoney } from "@/data/user";
 
 export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   const budgetData = BudgetSchema.safeParse(values);
@@ -27,21 +28,15 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   if (totalPercentage !== 100)
     return { error: "Percentage must be add up to 100" };
 
-  const existingBudgetThisMonth = await getBudgetThisMonth(month);
+  const existingBudgetThisMonth = await getBudgetThisMonth(userId, month, year);
   if (existingBudgetThisMonth)
     return { error: "You already have budget this month" };
 
   if (month < monthNow && yearNow)
     return { error: "Cannot add budget on the past month!" };
 
-  const currentMoney = await prisma.budget.findFirst({
-    where: {
-      userId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const currentMoney = await getCurrentTotalMoney(userId);
+
   const overallMoney = (currentMoney?.overallMoney || 0) + totalAmount;
 
   try {

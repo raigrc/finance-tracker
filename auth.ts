@@ -3,7 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import authConfig from "@/auth.config";
 import { Budget, UserRole } from "@prisma/client";
-import { getAllBudgetByUserId, getTotalBudgetByUserId } from "./data/user";
+import { getAllBudgetByUserId, getTotalBudgetByUserId } from "./data/budget";
 import { BudgetSummary } from "./types";
 
 declare module "next-auth" {
