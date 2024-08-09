@@ -19,17 +19,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useSession } from "next-auth/react";
 import { formatCurrency } from "@/lib/format-currency";
+import { auth } from "@/auth";
+import { getAllTransactionsByUserId } from "@/data/transactions";
 
-const RecentTransactions = ({
+const RecentTransactions = async ({
   title,
   description,
   className,
 }: RecentTransactionProps) => {
-  const { data: session } = useSession();
-  const transactions = session?.user.alltransactions;
-  if (!transactions) return session?.user.alltransactions;
+  const session = await auth();
+  const transactions = await getAllTransactionsByUserId(
+    session?.user.id as string,
+  );
+  if (!transactions) return null;
   return (
     <Card className={className}>
       <CardHeader>
@@ -47,7 +50,7 @@ const RecentTransactions = ({
             {transactions.map((transaction) => {
               return (
                 <TableRow key={transaction.id}>
-                  <TableCell className="text-left">
+                  <TableCell className="py-4 text-left">
                     {transaction.type}
                   </TableCell>
                   <TableCell className="text-center">

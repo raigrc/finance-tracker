@@ -36,7 +36,6 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
     return { error: "Cannot add budget on the past month!" };
 
   const currentMoney = await getCurrentTotalMoney(userId);
-
   const overallMoney = (currentMoney?.overallMoney || 0) + totalAmount;
 
   try {

@@ -5,10 +5,14 @@ const UserLayout = ({
   userdashboard,
 }: {
   children: React.ReactNode;
-  navbar: React.ReactNode;
   userdashboard: React.ReactNode;
 }) => {
-  return <div>{userdashboard}</div>;
+  return (
+    <div>
+      {children}
+      {userdashboard}
+    </div>
+  );
 };
 
 export default UserLayout;

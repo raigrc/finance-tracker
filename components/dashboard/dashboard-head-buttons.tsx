@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 const DashboardHeadButtons = () => {
+  console.log("DashboardHead is rendered");
+
   const pathname = usePathname();
   return (
     <div className="my-2 space-x-3 py-2">

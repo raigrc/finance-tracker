@@ -38,7 +38,14 @@ const DashboardChart = () => {
       color: "hsl(var(--chart-3))",
     },
   } satisfies ChartConfig;
-  return <ChartArea title="Overview - Total savings, wants, and needs" data={chartData} config={chartConfig} className="w-2/3" />;
+  return (
+    <ChartArea
+      title="Overview - Total savings, wants, and needs"
+      data={chartData}
+      config={chartConfig}
+      className="w-2/3"
+    />
+  );
 };
 
 export default DashboardChart;

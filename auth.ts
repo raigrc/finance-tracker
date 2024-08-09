@@ -38,14 +38,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (!token.sub) return session;
 
-      const userBudget = await getTotalBudgetByUserId(token.sub);
-      session.user.budget = userBudget as BudgetSummary;
+      // const userBudget = await getTotalBudgetByUserId(token.sub);
+      // session.user.budget = userBudget as BudgetSummary;
 
       const budgets = await getAllBudgetByUserId(token.sub);
       session.user.allbudgets = budgets;
 
-      const transactions = await getAllTransactionsByUserId(token.sub);
-      session.user.alltransactions = transactions;
+      // const transactions = await getAllTransactionsByUserId(token.sub);
+      // session.user.alltransactions = transactions;
 
       console.log({ session });
       return session;

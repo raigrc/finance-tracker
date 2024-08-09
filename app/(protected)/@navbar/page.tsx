@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import UserButton from "@/components/user/user-button";
+import UserButton from "@/components/dashboard/user-button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -30,18 +30,18 @@ const NavBar = () => {
                 Dashboard
               </NavigationMenuLink>
             </Link>
-            <Link href="/user/transaction">
+            <Link href="/transactions">
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} ${pathname === "/user/transaction" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`${navigationMenuTriggerStyle()} ${pathname === "/transactions" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
-                Transaction
+                Transactions
               </NavigationMenuLink>
             </Link>
-            <Link href="/user/budget">
+            <Link href="/budgets">
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} ${pathname === "/user/budget" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`${navigationMenuTriggerStyle()} ${pathname === "/budgets" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
-                Budget
+                Budgets
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
