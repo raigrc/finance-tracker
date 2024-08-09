@@ -1,7 +1,8 @@
 import DashboardSummary from "@/components/dashboard/dashboard-summary";
+import React from "react";
 
-const UserSummary = () => {
+const UserDashboardSummary = () => {
   return <DashboardSummary />;
 };
 
-export default UserSummary;
+export default UserDashboardSummary;

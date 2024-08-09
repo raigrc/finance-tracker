@@ -5,7 +5,7 @@ import { getMonthName } from "@/lib/get-month-name";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const DashboardChart = () => {
+const UserDashboardChart = () => {
   const { data: session } = useSession();
   const [chartData, setChartData] = useState<any>([]);
 
@@ -38,7 +38,14 @@ const DashboardChart = () => {
       color: "hsl(var(--chart-3))",
     },
   } satisfies ChartConfig;
-  return <ChartArea title="Overview - Total savings, wants, and needs" data={chartData} config={chartConfig} className="w-2/3" />;
+  return (
+    <ChartArea
+      title="Overview - Total savings, wants, and needs"
+      data={chartData}
+      config={chartConfig}
+      className="w-2/3"
+    />
+  );
 };
 
-export default DashboardChart;
+export default UserDashboardChart;

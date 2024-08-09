@@ -1,8 +1,7 @@
+import RecentTransactions from "@/components/dashboard/recent-transactions";
 import React from "react";
 
-import RecentTransactions from "@/components/dashboard/recent-transactions";
-
-const UserRecentTransaction = () => {
+const DefaultUserRecentTransactions = () => {
   return (
     <RecentTransactions
       title="Recent Transactions"
@@ -12,4 +11,4 @@ const UserRecentTransaction = () => {
   );
 };
 
-export default UserRecentTransaction;
+export default DefaultUserRecentTransactions;

@@ -25,21 +25,21 @@ const NavBar = () => {
           <NavigationMenuItem>
             <Link href="/dashboard">
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} ${pathname === "/dashboard" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`${navigationMenuTriggerStyle()} ${pathname.includes("/dashboard") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
                 Dashboard
               </NavigationMenuLink>
             </Link>
             <Link href="/transactions">
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} ${pathname === "/transactions" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`${navigationMenuTriggerStyle()} ${pathname.includes("/transactions") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
                 Transactions
               </NavigationMenuLink>
             </Link>
             <Link href="/budgets">
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} ${pathname === "/budgets" ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`${navigationMenuTriggerStyle()} ${pathname.includes("/budgets") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
                 Budgets
               </NavigationMenuLink>
