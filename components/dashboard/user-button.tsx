@@ -13,10 +13,11 @@ import { FaUserLarge } from "react-icons/fa6";
 import { logout } from "@/actions/logout";
 import LogoutButton from "./logout-button";
 import { IoExitOutline } from "react-icons/io5";
+import React from "react";
 
-const UserButton = () => {
+const UserButton: React.FC = React.memo(() => {
   const { data: session, status } = useSession();
-
+  console.log("UserButton rendered");
   const signOut = () => {
     logout();
   };
@@ -53,6 +54,6 @@ const UserButton = () => {
       </DropdownMenu>
     </div>
   );
-};
+});
 
 export default UserButton;

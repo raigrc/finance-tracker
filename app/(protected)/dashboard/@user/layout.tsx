@@ -2,7 +2,7 @@
 import BudgetForm from "@/components/dashboard/budget-form";
 import DashboardHeadButtons from "@/components/dashboard/dashboard-head-buttons";
 import Header from "@/components/dashboard/header";
-import TransactionButton from "@/components/dashboard/transaction-form";
+import TransactionButton from "@/components/transactions/transaction-form";
 import React from "react";
 
 const UserLayout = ({
@@ -10,7 +10,6 @@ const UserLayout = ({
   chart,
   recent_transaction,
 }: {
-  children: React.ReactNode;
   summary: React.ReactNode;
   chart: React.ReactNode;
   recent_transaction: React.ReactNode;

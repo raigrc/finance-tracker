@@ -15,6 +15,7 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -34,40 +35,43 @@ const RecentTransactions = async ({
   );
   if (!transactions) return null;
   return (
-    <Card className={className}>
+    <Card className={`relative ${className}`}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="w-full">
+      <CardContent className="">
         <Table>
           <TableHeader>
-            <TableHead className="text-left">Type</TableHead>
-            <TableHead className="text-center">Category</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableRow>
+              <TableHead className="text-left">Category</TableHead>
+              <TableHead className="text-center">Description</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction) => {
-              return (
-                <TableRow key={transaction.id}>
-                  <TableCell className="py-4 text-left">
-                    {transaction.type}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {transaction.category}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(transaction.amount)}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {transactions.length > 0 &&
+              transactions.map((transaction) => {
+                return (
+                  <TableRow key={transaction.id}>
+                    <TableCell className="py-3 text-left">
+                      {transaction.category}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {transaction.description}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(transaction.amount)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </CardContent>
       <CardFooter>
-        <Button variant="link">
-          <Link href="">show all</Link>
+        <Button variant="link" asChild>
+          <Link href="/transactions">show all</Link>
         </Button>
       </CardFooter>
     </Card>

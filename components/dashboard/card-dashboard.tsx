@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CardDashboardProps } from "@/types";
-import { Suspense } from "react";
 
 const CardDashboard = ({
   headerTitle,
@@ -23,9 +22,7 @@ const CardDashboard = ({
         <CardDescription className="text-lg">{headerIcon}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Suspense fallback={<h1>Loading...</h1>}>
-          <h1 className="text-2xl">{content}</h1>
-        </Suspense>
+        <h1 className="text-2xl">{content}</h1>
       </CardContent>
       <CardFooter>
         <CardDescription>

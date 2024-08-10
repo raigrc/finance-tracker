@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="h-full flex items-center justify-center">
       <Link href="/login">
-        <Button size="lg">Login</Button>
+        <Button size="lg" asChild>Login</Button>
       </Link>
     </div>
   );

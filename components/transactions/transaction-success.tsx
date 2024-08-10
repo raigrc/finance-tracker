@@ -1,9 +1,9 @@
 import { SuccessMessageProps } from "@/types";
+import React from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 
-const FormSuccess = ({ message }: SuccessMessageProps) => {
+const TransactionSuccess = ({ message }: SuccessMessageProps) => {
   if (!message) return null;
-
   return (
     <div className="flex items-center gap-x-2 rounded-md bg-emerald-500/15 p-3 text-sm text-emerald-500">
       <FaCircleCheck className="fill-emerald-500" />
@@ -12,4 +12,4 @@ const FormSuccess = ({ message }: SuccessMessageProps) => {
   );
 };
 
-export default FormSuccess;
+export default TransactionSuccess;

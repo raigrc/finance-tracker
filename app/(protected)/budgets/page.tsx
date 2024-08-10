@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 
-const UserBudgets = () => {
-  return <div>UserBudgets</div>;
+const BudgetsPage = () => {
+  return <div>BudgetsPage</div>;
 };
 
-export default UserBudgets;
+export default BudgetsPage;

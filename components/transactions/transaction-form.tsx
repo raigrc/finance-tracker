@@ -1,4 +1,4 @@
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,11 +31,19 @@ import { TransactionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transaction } from "@/actions/transaction";
 import { useSession } from "next-auth/react";
+import TransactionError from "./transaction-error";
+import TransactionSuccess from "./transaction-success";
 
 const TransactionButton = () => {
   const { data: session } = useSession();
   const [isPending, startTransition] = useTransition();
-  
+  const [transactionError, setTransactionError] = useState<
+    string | undefined
+  >();
+  const [transactionSuccess, setTransactionSuccess] = useState<
+    string | undefined
+  >();
+
   const form = useForm<z.infer<typeof TransactionSchema>>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
@@ -51,13 +59,16 @@ const TransactionButton = () => {
 
   const handleSubmit = (values: z.infer<typeof TransactionSchema>) => {
     startTransition(() => {
-      transaction(values);
+      transaction(values).then((data) => {
+        setTransactionError(data?.error);
+        setTransactionSuccess(data?.success);
+      });
     });
   };
   return (
     <Dialog>
       <DialogTrigger>
-        <Button>Add Transaction</Button>
+        <Button asChild>Add Transaction</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -236,6 +247,8 @@ const TransactionButton = () => {
                   )}
                 />
               </div>
+              <TransactionError message={transactionError} />
+              <TransactionSuccess message={transactionSuccess} />
               {isPending ? (
                 <Button className="w-full" size="lg" type="submit" disabled>
                   Adding Transaction...

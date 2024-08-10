@@ -19,11 +19,11 @@ export interface BackButtonProps {
   href: string;
 }
 
-export interface RegisterMessageProps {
+export interface ErrorMessageProps {
   message: string | undefined;
 }
 
-export interface BudgetMessageProps {
+export interface SuccessMessageProps {
   message: string | undefined;
 }
 

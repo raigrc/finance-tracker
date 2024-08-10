@@ -1,8 +1,8 @@
-import { RegisterMessageProps } from "@/types";
+import { SuccessMessageProps } from "@/types";
 import React from "react";
 import { FaTriangleExclamation } from "react-icons/fa6";
 
-const FormError = ({ message }: RegisterMessageProps) => {
+const FormError = ({ message }: SuccessMessageProps) => {
   if (!message) return null;
 
   return (

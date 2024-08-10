@@ -15,6 +15,7 @@ import {
   updateIncomeWants,
 } from "@/data/transactions";
 import { prisma } from "@/lib/prisma";
+import { error } from "console";
 
 export const transaction = async (
   values: z.infer<typeof TransactionSchema>,
@@ -70,16 +71,28 @@ export const transaction = async (
     } else {
       switch (category) {
         case "Needs": {
+          if (budgetThisMonth.needsAmount < amount)
+            return {
+              error: "Your budget this month cannot afford what you want!",
+            };
           await updateExpenseNeeds(budgetThisMonth.id, amount);
           await decreaseTotalMoney(currentMoney.id, amount);
           break;
         }
         case "Savings": {
+          if (budgetThisMonth.savingsAmount < amount)
+            return {
+              error: "Your budget this month cannot afford what you want!",
+            };
           await updateExpenseSavings(budgetThisMonth.id, amount);
           await decreaseTotalMoney(currentMoney.id, amount);
           break;
         }
         case "Wants": {
+          if (budgetThisMonth.wantsAmount < amount)
+            return {
+              error: "Your budget this month cannot afford what you want!",
+            };
           await updateExpenseWants(budgetThisMonth.id, amount);
           await decreaseTotalMoney(currentMoney.id, amount);
           break;
@@ -101,6 +114,8 @@ export const transaction = async (
         },
       });
     }
+
+    return { success: "Successful adding transaction!" };
   } catch {}
 
   console.log(transactionData);

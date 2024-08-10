@@ -2,18 +2,18 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-const DashboardLayout = ({
-  admin,
+const TransactionsLayout = ({
   user,
+  admin,
 }: {
-  admin: React.ReactNode;
   user: React.ReactNode;
+  admin: React.ReactNode;
 }) => {
   const { data: session, status } = useSession();
 
-  if (status == "loading") return <div>...</div>;
+  if (status == "loading") return <h1>Loading Data...</h1>;
 
   return <div>{session?.user.role == "ADMIN" ? admin : user}</div>;
 };
 
-export default DashboardLayout;
+export default TransactionsLayout;

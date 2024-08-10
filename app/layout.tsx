@@ -17,11 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body
-          className={poppins.className}
-        >
+    <html lang="en">
+      <body className={poppins.className}>
+        <SessionProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -30,8 +28,8 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }
