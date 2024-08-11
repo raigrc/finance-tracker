@@ -1,5 +1,5 @@
 import { ChartConfig } from "@/components/ui/chart";
-import { Budget } from "@prisma/client";
+import { Budget, Transaction } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 
 export interface AuthHeaderProps {
@@ -58,4 +58,13 @@ export interface RecentTransactionProps {
   title: string;
   description?: string;
   className?: string | undefined;
+}
+
+export interface PaginationProps {
+  totalPages: number | undefined;
+  currentPage: number | undefined;
+}
+
+export interface TransactionsTableProps {
+  transactions: Transaction[];
 }

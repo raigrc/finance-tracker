@@ -1,4 +1,6 @@
 import { prisma } from "@/lib/prisma";
+import { PaginationProps } from "@/types";
+import Link from "next/link";
 
 export const updateIncomeNeeds = async (id: string, amount: number) => {
   const incomeNeeds = await prisma.budget.update({
@@ -120,4 +122,25 @@ export const getAllTransactionsByUserId = async (id: string) => {
   });
 
   return allTransactions;
+};
+
+export const getTenTransactionsByUserId = async (id: string, page: number) => {
+  const transactions = await prisma.transaction.findMany({
+    where: { userId: id },
+    skip: (page - 1) * 10,
+    take: 10,
+    orderBy: { createdAt: "desc" },
+  });
+
+  const totalTransactions = await prisma.transaction.count({
+    where: {
+      userId: id,
+    },
+  });
+
+  return {
+    transactions,
+    total: totalTransactions,
+    totalPages: Math.ceil(totalTransactions / 10),
+  };
 };

@@ -9,19 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { auth } from "@/auth";
-import { getAllTransactionsByUserId } from "@/data/transactions";
-import { useSession } from "next-auth/react";
-import { Transaction } from "@prisma/client";
 import { formatCurrency } from "@/lib/format-currency";
+import { TransactionsTableProps } from "@/types";
 
-const TransactionsTable = async () => {
-  const session = await auth();
-  const userId = session?.user.id;
-  const transactions = await getAllTransactionsByUserId(userId as string);
-
+const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
   return (
-    <Table className="">
+    <Table>
       <TableHeader>
         <TableRow className="">
           <TableHead className="w-1/6">Date</TableHead>
@@ -54,7 +47,6 @@ const TransactionsTable = async () => {
           );
         })}
       </TableBody>
-      <TableFooter></TableFooter>
     </Table>
   );
 };
