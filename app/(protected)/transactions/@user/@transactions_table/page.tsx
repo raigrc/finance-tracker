@@ -10,6 +10,7 @@ const UserTransactionsTable = () => {
   const searchParams = useSearchParams();
   const [totalPages, setTotalPages] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalTransactions, setTotalTransactions] = useState<number>();
 
   const fetchData = async (page: number) => {
     const response = await fetch(`/api/transactions?page=${page}`);
@@ -17,6 +18,7 @@ const UserTransactionsTable = () => {
     console.log(data);
     setTransactions(data.transactions);
     setTotalPages(data.totalPages);
+    setTotalTransactions(data.total);
   };
 
   useEffect(() => {
@@ -26,7 +28,10 @@ const UserTransactionsTable = () => {
   }, [searchParams]);
   return (
     <>
-      <TransactionsTable transactions={transactions} />
+      <TransactionsTable
+        transactions={transactions}
+        totalTransactions={totalTransactions}
+      />
       <PaginationTable totalPages={totalPages} currentPage={currentPage} />
     </>
   );

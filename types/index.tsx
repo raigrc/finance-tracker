@@ -67,4 +67,5 @@ export interface PaginationProps {
 
 export interface TransactionsTableProps {
   transactions: Transaction[];
+  totalTransactions: number | undefined;
 }
