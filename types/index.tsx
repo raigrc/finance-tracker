@@ -69,3 +69,8 @@ export interface TransactionsTableProps {
   transactions: Transaction[];
   totalTransactions: number | undefined;
 }
+
+export interface BudgetsTableProps {
+  budgets: Budget[];
+  totalBudgets: number | undefined;
+}

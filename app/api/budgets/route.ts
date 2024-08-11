@@ -1,32 +1,31 @@
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 
-// Handle GET requests
 export async function GET(req: NextRequest) {
   const session = await auth();
   const url = new URL(req.url);
-  const page = Number(url.searchParams.get("page"));
+  const page = Number(url.searchParams.get("page")) || 1;
 
   if (!session || !session.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const transactions = await prisma.transaction.findMany({
+  const budgets = await prisma.budget.findMany({
     where: { userId: session.user.id },
-    skip: (page - 1) * 10,
     take: 10,
-    orderBy: { createdAt: "desc" },
+    skip: (page - 1) * 10,
+    orderBy: [{ month: "asc" }, { year: "asc" }],
   });
 
-  const totalTransactions = await prisma.transaction.count({
+  const totalBudget = await prisma.budget.count({
     where: { userId: session.user.id },
   });
 
   return NextResponse.json({
-    transactions,
-    total: totalTransactions,
-    totalPages: Math.ceil(totalTransactions / 10),
+    budgets,
+    total: totalBudget,
+    totalPages: Math.ceil(totalBudget / 10),
     page,
   });
 }

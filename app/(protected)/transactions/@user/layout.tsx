@@ -3,7 +3,7 @@ import Header from "@/components/dashboard/header";
 import TransactionFilter from "@/components/transactions/transaction-filter";
 import React from "react";
 
-const UserTransactions = ({
+const UserTransactionPage = ({
   transactions_table,
 }: {
   transactions_table: React.ReactNode;
@@ -21,4 +21,4 @@ const UserTransactions = ({
   );
 };
 
-export default UserTransactions;
+export default UserTransactionPage;

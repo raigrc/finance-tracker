@@ -8,9 +8,9 @@ import React, { useEffect, useState } from "react";
 const UserTransactionsTable = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const searchParams = useSearchParams();
-  const [totalPages, setTotalPages] = useState<number>();
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalTransactions, setTotalTransactions] = useState<number>();
+  const [totalTransactions, setTotalTransactions] = useState<number>(0);
 
   const fetchData = async (page: number) => {
     const response = await fetch(`/api/transactions?page=${page}`);
