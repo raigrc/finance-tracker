@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { BudgetsTableProps } from "@/types";
 import { getMonthName } from "@/lib/get-month-name";
+import { formatCurrency } from "@/lib/format-currency";
 
 const BudgetsTable = ({ totalBudgets, budgets }: BudgetsTableProps) => {
   return (
@@ -50,7 +51,7 @@ const BudgetsTable = ({ totalBudgets, budgets }: BudgetsTableProps) => {
                   {budget.savingsPercentage}
                 </TableCell>
                 <TableCell className="text-right">
-                  {budget.overallMoney}
+                  {formatCurrency(budget.overallMoney)}
                 </TableCell>
               </TableRow>
             );
