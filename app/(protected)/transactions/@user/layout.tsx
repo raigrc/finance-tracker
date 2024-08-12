@@ -1,6 +1,6 @@
 "use client";
 import Header from "@/components/dashboard/header";
-import TransactionFilter from "@/components/transactions/transaction-filter";
+import TransactionForm from "@/components/transactions/transaction-form";
 import React from "react";
 
 const UserTransactionPage = ({
@@ -10,11 +10,12 @@ const UserTransactionPage = ({
 }) => {
   return (
     <>
-      <div>
-        <Header title="All Transactions" />
-      </div>
-      <div>
-        <TransactionFilter />
+      <Header title="All Transactions" />
+      <div className="">
+        <div className="flex items-center justify-between">
+          
+        </div>
+
         {transactions_table}
       </div>
     </>

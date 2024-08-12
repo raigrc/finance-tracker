@@ -2,7 +2,7 @@
 import BudgetForm from "@/components/dashboard/budget-form";
 import DashboardHeadButtons from "@/components/dashboard/dashboard-head-buttons";
 import Header from "@/components/dashboard/header";
-import TransactionButton from "@/components/transactions/transaction-form";
+import TransactionForm from "@/components/transactions/transaction-form";
 import React from "react";
 
 const UserLayout = ({
@@ -23,7 +23,7 @@ const UserLayout = ({
         <div className="flex items-center justify-between">
           <DashboardHeadButtons />
           <div className="space-x-3">
-            <TransactionButton />
+            <TransactionForm />
             <BudgetForm />
           </div>
         </div>

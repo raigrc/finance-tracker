@@ -34,7 +34,7 @@ import { useSession } from "next-auth/react";
 import TransactionError from "./transaction-error";
 import TransactionSuccess from "./transaction-success";
 
-const TransactionButton = () => {
+const TransactionForm = () => {
   const { data: session } = useSession();
   const [isPending, startTransition] = useTransition();
   const [transactionError, setTransactionError] = useState<
@@ -68,7 +68,7 @@ const TransactionButton = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button asChild>Add Transaction</Button>
+        <Button>Add Transaction</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -267,4 +267,4 @@ const TransactionButton = () => {
   );
 };
 
-export default TransactionButton;
+export default TransactionForm;

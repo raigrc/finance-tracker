@@ -1,5 +1,7 @@
 "use client";
 import PaginationTable from "@/components/transactions/pagination-table";
+import TransactionFilter from "@/components/transactions/transaction-filter";
+import TransactionForm from "@/components/transactions/transaction-form";
 import TransactionsTable from "@/components/transactions/transaction-table";
 import { Transaction } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
@@ -11,23 +13,55 @@ const UserTransactionsTable = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalTransactions, setTotalTransactions] = useState<number>(0);
+  const [filters, setFilters] = useState({
+    showNeeds: true,
+    showWants: true,
+    showSavings: true,
+    showIncome: true,
+    showExpense: true,
+  });
+
+  console.log({ filters });
 
   const fetchData = async (page: number) => {
-    const response = await fetch(`/api/transactions?page=${page}`);
-    const data = await response.json();
-    console.log(data);
-    setTransactions(data.transactions);
-    setTotalPages(data.totalPages);
-    setTotalTransactions(data.total);
+    const queryParams = new URLSearchParams({
+      page: String(page),
+    });
+    if (!filters.showNeeds) queryParams.set("needs", "false");
+    if (!filters.showWants) queryParams.set("wants", "false");
+    if (!filters.showSavings) queryParams.set("savings", "false");
+    if (!filters.showIncome) queryParams.set("income", "false");
+    if (!filters.showExpense) queryParams.set("expense", "false");
+
+    try {
+      const response = await fetch(
+        `/api/transactions?${queryParams.toString()}`,
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+
+      setTransactions(data.transactions);
+      setTotalPages(data.totalPages);
+      setTotalTransactions(data.total);
+    } catch (error) {
+      console.error("Error Fetching Transactions:", error);
+    }
   };
 
   useEffect(() => {
     const page = Number(searchParams.get("page")) || 1;
     setCurrentPage(page);
     fetchData(page);
-  }, [searchParams]);
+  }, [searchParams, filters]);
   return (
     <>
+      <div className="flex items-center justify-between">
+        <TransactionFilter onFilterChange={setFilters} />
+        <TransactionForm />
+      </div>
+
       <TransactionsTable
         transactions={transactions}
         totalTransactions={totalTransactions}
