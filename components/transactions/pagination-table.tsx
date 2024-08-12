@@ -27,7 +27,16 @@ const PaginationTable = ({ totalPages, currentPage }: PaginationProps) => {
           {pages.map((page) => {
             return (
               <PaginationItem key={page}>
-                <PaginationLink href={`?page=${page}`}>{page}</PaginationLink>
+                <PaginationLink
+                  href={`?page=${page}`}
+                  className={
+                    currentPage == page
+                      ? "cursor-not-allowed text-gray-400"
+                      : ""
+                  }
+                >
+                  {page}
+                </PaginationLink>
               </PaginationItem>
             );
           })}

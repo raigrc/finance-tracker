@@ -19,7 +19,7 @@ const TransactionsTable = ({
   return (
     <>
       <h1>Number of Transactions: {totalTransactions}</h1>
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow className="">
             <TableHead className="w-1/6">Date</TableHead>

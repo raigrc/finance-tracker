@@ -29,34 +29,32 @@ const BudgetsTable = ({ totalBudgets, budgets }: BudgetsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <Suspense fallback={<h1>Loading Data...</h1>}>
-            {budgets.map((budget) => {
-              return (
-                <TableRow key={budget.id}>
-                  <TableCell className="py-3 text-left">
-                    {getMonthName(budget.month)}
-                  </TableCell>
-                  <TableCell className="text-center">{budget.year}</TableCell>
-                  <TableCell className="text-center">
-                    {budget.needsAmount}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {budget.wantsAmount}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {budget.savingsAmount}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {budget.needsPercentage}/{budget.wantsPercentage}/
-                    {budget.savingsPercentage}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {budget.overallMoney}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </Suspense>
+          {budgets.map((budget) => {
+            return (
+              <TableRow key={budget.id}>
+                <TableCell className="py-4 text-left">
+                  {getMonthName(budget.month)}
+                </TableCell>
+                <TableCell className="text-center">{budget.year}</TableCell>
+                <TableCell className="text-center">
+                  {budget.needsAmount}
+                </TableCell>
+                <TableCell className="text-center">
+                  {budget.wantsAmount}
+                </TableCell>
+                <TableCell className="text-center">
+                  {budget.savingsAmount}
+                </TableCell>
+                <TableCell className="text-center">
+                  {budget.needsPercentage}/{budget.wantsPercentage}/
+                  {budget.savingsPercentage}
+                </TableCell>
+                <TableCell className="text-right">
+                  {budget.overallMoney}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </>

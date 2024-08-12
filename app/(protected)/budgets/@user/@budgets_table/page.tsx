@@ -11,14 +11,17 @@ const UserBudgetsTable = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalBudgets, setTotalBudgets] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchData = async (page: number) => {
+    setIsLoading(true);
     const response = await fetch(`api/budgets?page=${page}`);
     const data = await response.json();
     console.log(data);
     setBudgets(data.budgets);
     setTotalBudgets(data.total);
     setTotalPage(data.totalPages);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -26,6 +29,10 @@ const UserBudgetsTable = () => {
     setCurrentPage(page);
     fetchData(page);
   }, [searchParams]);
+
+  if (isLoading) {
+    return <h1 className="text-center">Loading Data...</h1>; // Show loading state
+  }
   return (
     <>
       <BudgetsTable budgets={budgets} totalBudgets={totalBudgets} />
