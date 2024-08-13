@@ -32,7 +32,7 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   if (existingBudgetThisMonth)
     return { error: "You already have budget this month" };
 
-  if (month < monthNow && yearNow)
+  if (month < monthNow && year == yearNow)
     return { error: "Cannot add budget on the past month!" };
 
   const currentMoney = await getCurrentTotalMoney(userId);
