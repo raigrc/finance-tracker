@@ -1,9 +1,12 @@
 "use client";
+import BudgetsFilter from "@/components/budgets/budgets-filter";
 import BudgetsTable from "@/components/budgets/budgets-table";
+import BudgetForm from "@/components/dashboard/budget-form";
 import PaginationTable from "@/components/transactions/pagination-table";
 import { Budget } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaCaretDown } from "react-icons/fa6";
 
 const UserBudgetsTable = () => {
   const searchParams = useSearchParams();
@@ -11,6 +14,9 @@ const UserBudgetsTable = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalBudgets, setTotalBudgets] = useState<number>(0);
+  const [filters, setFilters] = useState({});
+  console.log({ filters });
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchData = async (page: number) => {
@@ -35,6 +41,14 @@ const UserBudgetsTable = () => {
   }
   return (
     <>
+      <div className="flex items-center justify-between">
+        <BudgetsFilter
+          onFilterChange={setFilters}
+          icon={<FaCaretDown />}
+          budgets={budgets}
+        />
+        <BudgetForm />
+      </div>
       <BudgetsTable budgets={budgets} totalBudgets={totalBudgets} />
       <PaginationTable totalPages={totalPage} currentPage={currentPage} />
     </>

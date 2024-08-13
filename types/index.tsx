@@ -74,3 +74,9 @@ export interface BudgetsTableProps {
   budgets: Budget[];
   totalBudgets: number | undefined;
 }
+
+export interface FilterProps {
+  onFilterChange: (filter: any) => void;
+  icon: React.ReactNode;
+  budgets?: Budget[];
+}

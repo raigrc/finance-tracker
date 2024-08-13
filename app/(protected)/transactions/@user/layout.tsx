@@ -11,13 +11,7 @@ const UserTransactionPage = ({
   return (
     <>
       <Header title="All Transactions" />
-      <div className="">
-        <div className="flex items-center justify-between">
-          
-        </div>
-
-        {transactions_table}
-      </div>
+      {transactions_table}
     </>
   );
 };

@@ -6,6 +6,7 @@ import TransactionsTable from "@/components/transactions/transaction-table";
 import { Transaction } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaCaretDown } from "react-icons/fa6";
 
 const UserTransactionsTable = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -58,7 +59,7 @@ const UserTransactionsTable = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <TransactionFilter onFilterChange={setFilters} />
+        <TransactionFilter icon={<FaCaretDown />} onFilterChange={setFilters} />
         <TransactionForm />
       </div>
 

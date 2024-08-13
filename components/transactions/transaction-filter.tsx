@@ -9,14 +9,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { FaCaretDown } from "react-icons/fa6";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const TransactionFilter = ({
   onFilterChange,
+  icon,
 }: {
   onFilterChange: (filters: any) => void;
+  icon: React.ReactNode;
 }) => {
   const [showNeeds, setShowNeeds] = useState<Checked>(true);
   const [showWants, setShowWants] = useState<Checked>(true);
@@ -38,9 +39,7 @@ const TransactionFilter = ({
     <div className="space-x-3 py-4">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
-          <Button variant="ghost">
-            Category <FaCaretDown />
-          </Button>
+          <Button variant="outline">Category {icon}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuCheckboxItem
@@ -65,9 +64,7 @@ const TransactionFilter = ({
       </DropdownMenu>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
-          <Button variant="ghost">
-            Type <FaCaretDown />
-          </Button>
+          <Button variant="outline">Type {icon}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuCheckboxItem
