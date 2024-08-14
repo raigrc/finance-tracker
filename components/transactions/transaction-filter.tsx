@@ -3,8 +3,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
@@ -22,36 +20,24 @@ const TransactionFilter = ({
   const [needs, setNeeds] = useState<Checked>(true);
   const [wants, setWants] = useState<Checked>(true);
   const [savings, setSavings] = useState<Checked>(true);
-
   const [income, setIncome] = useState<Checked>(true);
   const [expense, setExpense] = useState<Checked>(true);
 
   useEffect(() => {
-    onFilterChange({
-      needs,
-      wants,
-      savings,
-      income,
-      expense,
-    });
+    onFilterChange({ needs, wants, savings, income, expense });
   }, [needs, wants, savings, income, expense]);
+
   return (
     <div className="space-x-3 py-4">
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger>
-          <Button variant="outline">Category {icon}</Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button  variant="outline">Category {icon}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuCheckboxItem
-            checked={needs}
-            onCheckedChange={setNeeds}
-          >
+          <DropdownMenuCheckboxItem checked={needs} onCheckedChange={setNeeds}>
             Needs
           </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem
-            checked={wants}
-            onCheckedChange={setWants}
-          >
+          <DropdownMenuCheckboxItem checked={wants} onCheckedChange={setWants}>
             Wants
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
@@ -62,8 +48,8 @@ const TransactionFilter = ({
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button variant="outline">Type {icon}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

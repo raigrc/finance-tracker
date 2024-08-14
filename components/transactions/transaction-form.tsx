@@ -67,7 +67,7 @@ const TransactionForm = () => {
   };
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>Add Transaction</Button>
       </DialogTrigger>
       <DialogContent>

@@ -69,7 +69,7 @@ const BudgetForm = () => {
   };
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>Add Budget</Button>
       </DialogTrigger>
       <DialogContent>

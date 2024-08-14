@@ -1,6 +1,11 @@
 import { UserHeaderProps } from "@/types";
 import React from "react";
-import CurrentDateTime from "@/components/current-date-time";
+import dynamic from "next/dynamic";
+
+const CurrentDateTime = dynamic(
+  () => import("@/components/current-date-time"),
+  { ssr: false },
+);
 
 const Header = ({ title }: UserHeaderProps) => {
   return (
