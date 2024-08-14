@@ -19,22 +19,22 @@ const TransactionFilter = ({
   onFilterChange: (filters: any) => void;
   icon: React.ReactNode;
 }) => {
-  const [showNeeds, setShowNeeds] = useState<Checked>(true);
-  const [showWants, setShowWants] = useState<Checked>(true);
-  const [showSavings, setShowSavings] = useState<Checked>(true);
+  const [needs, setNeeds] = useState<Checked>(true);
+  const [wants, setWants] = useState<Checked>(true);
+  const [savings, setSavings] = useState<Checked>(true);
 
-  const [showIncome, setShowIncome] = useState<Checked>(true);
-  const [showExpense, setShowExpense] = useState<Checked>(true);
+  const [income, setIncome] = useState<Checked>(true);
+  const [expense, setExpense] = useState<Checked>(true);
 
   useEffect(() => {
     onFilterChange({
-      showNeeds,
-      showWants,
-      showSavings,
-      showIncome,
-      showExpense,
+      needs,
+      wants,
+      savings,
+      income,
+      expense,
     });
-  }, [showNeeds, showWants, showSavings, showIncome, showExpense]);
+  }, [needs, wants, savings, income, expense]);
   return (
     <div className="space-x-3 py-4">
       <DropdownMenu modal={false}>
@@ -43,20 +43,20 @@ const TransactionFilter = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuCheckboxItem
-            checked={showNeeds}
-            onCheckedChange={setShowNeeds}
+            checked={needs}
+            onCheckedChange={setNeeds}
           >
             Needs
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
-            checked={showWants}
-            onCheckedChange={setShowWants}
+            checked={wants}
+            onCheckedChange={setWants}
           >
             Wants
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
-            checked={showSavings}
-            onCheckedChange={setShowSavings}
+            checked={savings}
+            onCheckedChange={setSavings}
           >
             Savings
           </DropdownMenuCheckboxItem>
@@ -68,14 +68,14 @@ const TransactionFilter = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuCheckboxItem
-            checked={showIncome}
-            onCheckedChange={setShowIncome}
+            checked={income}
+            onCheckedChange={setIncome}
           >
             Income
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
-            checked={showExpense}
-            onCheckedChange={setShowExpense}
+            checked={expense}
+            onCheckedChange={setExpense}
           >
             Expense
           </DropdownMenuCheckboxItem>

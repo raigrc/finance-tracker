@@ -14,12 +14,12 @@ const UserTransactionsTable = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalTransactions, setTotalTransactions] = useState<number>(0);
-  const [filters, setFilters] = useState({
-    showNeeds: true,
-    showWants: true,
-    showSavings: true,
-    showIncome: true,
-    showExpense: true,
+  const [filters, setFilters] = useState<any>({
+    needs: true,
+    wants: true,
+    savings: true,
+    income: true,
+    expense: true,
   });
 
   console.log({ filters });
@@ -27,17 +27,15 @@ const UserTransactionsTable = () => {
   const fetchData = async (page: number) => {
     const queryParams = new URLSearchParams({
       page: String(page),
+      ...filters,
     });
-    if (!filters.showNeeds) queryParams.set("needs", "false");
-    if (!filters.showWants) queryParams.set("wants", "false");
-    if (!filters.showSavings) queryParams.set("savings", "false");
-    if (!filters.showIncome) queryParams.set("income", "false");
-    if (!filters.showExpense) queryParams.set("expense", "false");
 
     try {
       const response = await fetch(
         `/api/transactions?${queryParams.toString()}`,
       );
+      console.log({ response });
+
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }

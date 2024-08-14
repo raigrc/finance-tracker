@@ -15,9 +15,8 @@ type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const BudgetsFilter = ({ onFilterChange, icon, budgets }: FilterProps) => {
   const [showYear, setShowYear] = useState<Checked>(true);
-  const years = Array.from(
-    new Set(budgets?.map((budget) => budget.year) || []),
-  );
+  const years = Array.from(new Set(budgets?.map((budgets) => budgets.year)));
+  console.log({ years });
 
   useEffect(() => {
     onFilterChange({ showYear });
