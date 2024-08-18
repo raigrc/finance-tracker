@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/dashboard/header";
+import Header from "@/components/protected/dashboard/header";
 import React from "react";
 
 const TransactionsPage = ({

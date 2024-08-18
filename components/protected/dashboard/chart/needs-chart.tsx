@@ -1,12 +1,14 @@
 "use client";
 import { ChartConfig } from "@/components/ui/chart";
-import ChartArea from "@/components/dashboard/chart-area";
+import ChartArea from "@/components/protected/dashboard/chart-area";
 import { getMonthName } from "@/lib/get-month-name";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const SavingsChart = () => {
-  const { data: session } = useSession();
+const NeedsChart = () => {
+  const { data: session, status } = useSession();
+
+  if (status == "loading") return <h1>Loading...</h1>;
   const [chartData, setChartData] = useState<any>([]);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ const SavingsChart = () => {
     if (!allBudget) return;
 
     const transformedData = allBudget.map((budget) => ({
-      savings: budget.savingsAmount,
+      needs: budget.needsAmount,
       month: getMonthName(budget.month),
     }));
 
@@ -23,15 +25,15 @@ const SavingsChart = () => {
   }, [session]);
 
   const chartConfig = {
-    savings: {
-      label: "Savings",
-      color: "hsl(var(--chart-3))",
+    needs: {
+      label: "Needs",
+      color: "hsl(var(--chart-1))",
     },
   } satisfies ChartConfig;
 
   return (
     <ChartArea
-      title="Savings Chart"
+      title="Needs Chart"
       data={chartData}
       config={chartConfig}
       className="w-2/3"
@@ -39,4 +41,4 @@ const SavingsChart = () => {
   );
 };
 
-export default SavingsChart;
+export default NeedsChart;

@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { FilterProps } from "@/types";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 

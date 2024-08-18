@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useRef, useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,55 +24,55 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { BudgetSchema, TransactionSchema } from "@/schemas";
+import { TransactionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { budget } from "@/actions/budget";
+import { transaction } from "@/actions/transaction";
 import { useSession } from "next-auth/react";
-import BudgetSuccess from "./budget-success";
-import BudgetError from "./budget-error";
-import { useRouter } from "next/router";
+import TransactionError from "./transaction-error";
+import TransactionSuccess from "./transaction-success";
 
-const BudgetForm = () => {
+const TransactionForm = () => {
   const { data: session } = useSession();
-
   const [isPending, startTransition] = useTransition();
+  const [transactionError, setTransactionError] = useState<
+    string | undefined
+  >();
+  const [transactionSuccess, setTransactionSuccess] = useState<
+    string | undefined
+  >();
 
-  const [budgetSuccess, setBudgetSuccess] = useState<string | undefined>();
-  const [budgetError, setBudgetError] = useState<string | undefined>();
-
-  const form = useForm<z.infer<typeof BudgetSchema>>({
-    resolver: zodResolver(BudgetSchema),
+  const form = useForm<z.infer<typeof TransactionSchema>>({
+    resolver: zodResolver(TransactionSchema),
     defaultValues: {
       userId: session?.user.id,
-      totalAmount: 0,
-      needsPercentage: 50,
-      wantsPercentage: 30,
-      savingsPercentage: 20,
+      amount: undefined,
+      category: undefined,
+      type: "INCOME",
       month: new Date().getMonth() + 1,
       year: new Date(Date.now()).getFullYear(),
+      description: "",
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof BudgetSchema>) => {
+  const handleSubmit = (values: z.infer<typeof TransactionSchema>) => {
     startTransition(() => {
-      budget(values).then((data) => {
-        setBudgetSuccess(data?.success);
-        setBudgetError(data?.error);
-        form.reset();
+      transaction(values).then((data) => {
+        setTransactionError(data?.error);
+        setTransactionSuccess(data?.success);
       });
     });
   };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add Budget</Button>
+        <Button>Add Transaction</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-xl">Add Budget</DialogTitle>
+          <DialogTitle className="text-xl">Add Transaction</DialogTitle>
           <DialogDescription>This is a description</DialogDescription>
           <Form {...form}>
             <form
@@ -82,65 +80,69 @@ const BudgetForm = () => {
               className="space-y-6 py-4"
             >
               <div className="space-y-4">
-                <div className="flex flex-row items-center justify-between space-x-3">
-                  <FormField
-                    control={form.control}
-                    name="needsPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel aria-required="true">
-                          Needs <span className="text-gray-400">(%)</span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input disabled={isPending} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="wantsPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel aria-required="true">
-                          Wants <span className="text-gray-400">(%)</span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input disabled={isPending} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="savingsPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel aria-required="true">
-                          Savings <span className="text-gray-400">(%)</span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input disabled={isPending} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel aria-required="true">Type</FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={isPending}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="INCOME">Income</SelectItem>
+                            <SelectItem value="EXPENSE">Expense</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="totalAmount"
+                  name="amount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel aria-required="true">
-                        Amount of Money
-                      </FormLabel>
+                      <FormLabel aria-required="true">Amount</FormLabel>
                       <FormControl>
-                        <Input disabled={isPending} {...field} />
+                        <Input {...field} disabled={isPending} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={isPending}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Needs">Needs</SelectItem>
+                            <SelectItem value="Wants">Wants</SelectItem>
+                            <SelectItem value="Savings">Savings</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -221,28 +223,48 @@ const BudgetForm = () => {
                   )}
                 />
               </div>
-              <BudgetSuccess message={budgetSuccess} />
-              <BudgetError message={budgetError} />
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Description{" "}
+                        <span className="text-gray-400 opacity-50">
+                          (optional)
+                        </span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          placeholder="Ex. Salary, Grocery Shopping"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <TransactionError message={transactionError} />
+              <TransactionSuccess message={transactionSuccess} />
               {isPending ? (
-                <Button disabled className="w-full" size="lg" type="submit">
-                  Adding Budget...
+                <Button className="w-full" size="lg" type="submit" disabled>
+                  Adding Transaction...
                 </Button>
               ) : (
-                <Button
-                  disabled={isPending}
-                  className="w-full"
-                  size="lg"
-                  type="submit"
-                >
-                  Add Budget
+                <Button className="w-full" size="lg" type="submit">
+                  Add Transaction
                 </Button>
               )}
             </form>
           </Form>
         </DialogHeader>
+        {/* <DialogDescription>This is Description</DialogDescription> */}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default BudgetForm;
+export default TransactionForm;

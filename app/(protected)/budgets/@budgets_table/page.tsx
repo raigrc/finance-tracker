@@ -1,8 +1,8 @@
 "use client";
-import BudgetsFilter from "@/components/budgets/budgets-filter";
-import BudgetsTable from "@/components/budgets/budgets-table";
-import BudgetForm from "@/components/dashboard/budget-form";
-import PaginationTable from "@/components/transactions/pagination-table";
+import BudgetsFilter from "@/components/protected/budgets/budgets-filter";
+import BudgetsTable from "@/components/protected/budgets/budgets-table";
+import BudgetForm from "@/components/protected/dashboard/budget-form";
+import PaginationTable from "@/components/protected/transactions/pagination-table";
 import { Budget } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

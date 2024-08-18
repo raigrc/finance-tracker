@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/dashboard/header";
+import Header from "@/components/protected/dashboard/header";
 import dynamic from "next/dynamic";
 import React from "react";
 

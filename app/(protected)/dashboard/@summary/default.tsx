@@ -1,4 +1,4 @@
-import DashboardSummary from "@/components/dashboard/dashboard-summary";
+import DashboardSummary from "@/components/protected/dashboard/dashboard-summary";
 import React from "react";
 
 const DefaultUserDashboardSummary = () => {

@@ -1,4 +1,4 @@
-import RecentTransactions from "@/components/dashboard/recent-transactions";
+import RecentTransactions from "@/components/protected/dashboard/recent-transactions";
 import React from "react";
 
 const DefaultUserRecentTransactions = () => {

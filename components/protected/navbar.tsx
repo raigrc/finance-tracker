@@ -1,18 +1,18 @@
 "use client";
 import {
   NavigationMenu,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import UserButton from "@/components/dashboard/user-button";
+import UserButton from "@/components/protected/dashboard/user-button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Navbar = () => {
+const NavBar = () => {
   const pathname = usePathname();
+
   return (
     <NavigationMenu>
       <NavigationMenuList className="flex-between flex">
@@ -43,6 +43,13 @@ const Navbar = () => {
                 Budgets
               </NavigationMenuLink>
             </Link>
+            <Link href="/goals">
+              <NavigationMenuLink
+                className={` bg- ${navigationMenuTriggerStyle()} ${pathname.includes("/budgets") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+              >
+                Goals
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
         </div>
 
@@ -54,4 +61,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

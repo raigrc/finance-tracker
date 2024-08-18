@@ -1,4 +1,4 @@
-import SavingsChart from "@/components/dashboard/chart/savings-chart";
+import SavingsChart from "@/components/protected/dashboard/chart/savings-chart";
 
 const UserWantsChart = () => {
   return <SavingsChart />;

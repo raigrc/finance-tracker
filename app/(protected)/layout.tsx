@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import React from "react";
 import dynamic from "next/dynamic";
 
-const NavBar = dynamic(() => import("./@navbar/page"), { ssr: false });
+const Navbar = dynamic(() => import("@/components/protected/navbar"), {
+  ssr: false,
+});
 
 const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -11,12 +13,14 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/login");
   }
   return (
-    <div>
-      <div>
-        <NavBar />
+    <>
+      <div className="fixed top-0 z-10 w-full bg-background">
+        <Navbar />
       </div>
-      <div>{children}</div>
-    </div>
+      <div className="pt-20">
+        <div className="px-3">{children}</div>
+      </div>
+    </>
   );
 };
 

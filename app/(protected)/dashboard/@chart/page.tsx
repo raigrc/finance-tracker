@@ -1,6 +1,6 @@
 "use client";
 import { ChartConfig } from "@/components/ui/chart";
-import ChartArea from "@/components/dashboard/chart-area";
+import ChartArea from "@/components/protected/dashboard/chart-area";
 import { getMonthName } from "@/lib/get-month-name";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";

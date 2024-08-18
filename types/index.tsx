@@ -33,6 +33,7 @@ export interface CardDashboardProps {
   content: string | number;
   footerTitle: string;
   footerValue: string | number;
+  iconColor?: string;
 }
 
 export interface UserHeaderProps {

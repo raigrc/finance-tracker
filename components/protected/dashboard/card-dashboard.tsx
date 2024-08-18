@@ -14,12 +14,17 @@ const CardDashboard = ({
   content,
   footerTitle,
   footerValue,
+  iconColor,
 }: CardDashboardProps) => {
   return (
-    <Card className="w-full shadow-md">
+    <Card className={`w-full shadow-md`}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-sm tracking-wide">{headerTitle}</CardTitle>
-        <CardDescription className="text-lg">{headerIcon}</CardDescription>
+        <CardDescription
+          className={`rounded-full p-2 text-lg text-white ${iconColor}`}
+        >
+          {headerIcon}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <h1 className="text-2xl">{content}</h1>

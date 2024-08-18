@@ -1,8 +1,8 @@
 "use client";
-import PaginationTable from "@/components/transactions/pagination-table";
-import TransactionFilter from "@/components/transactions/transaction-filter";
-import TransactionForm from "@/components/transactions/transaction-form";
-import TransactionsTable from "@/components/transactions/transaction-table";
+import PaginationTable from "@/components/protected/transactions/pagination-table";
+import TransactionFilter from "@/components/protected/transactions/transaction-filter";
+import TransactionForm from "@/components/protected/transactions/transaction-form";
+import TransactionsTable from "@/components/protected/transactions/transaction-table";
 import { Transaction } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

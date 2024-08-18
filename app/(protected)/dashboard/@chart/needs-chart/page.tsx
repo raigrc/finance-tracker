@@ -1,4 +1,4 @@
-import NeedsChart from "@/components/dashboard/chart/needs-chart";
+import NeedsChart from "@/components/protected/dashboard/chart/needs-chart";
 
 const UserNeedsChart = () => {
   return <NeedsChart />;
