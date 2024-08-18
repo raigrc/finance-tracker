@@ -1,7 +1,6 @@
 "use client";
 import {
   NavigationMenu,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
