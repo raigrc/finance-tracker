@@ -17,7 +17,7 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
       <div className="fixed top-0 z-10 w-full bg-background">
         <Navbar />
       </div>
-      <div className="pt-20">
+      <div className="pt-16">
         <div className="px-3">{children}</div>
       </div>
     </>

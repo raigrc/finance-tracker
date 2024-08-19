@@ -4,7 +4,6 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
 import bcryptjs from "bcryptjs";
-import { prisma } from "./lib/prisma";
 import { getUserByEmail } from "./data/user";
 
 export default {

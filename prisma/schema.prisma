@@ -19,7 +19,7 @@ model User {
   email         String?       @unique
   image         String?
   password      String?
-  totalMoney    Float?
+  totalMoney    Float?        @default(0)
   accounts      Account[]
   sessions      Session[]
   Transaction   Transaction[]
@@ -84,13 +84,13 @@ model Transaction {
 }
 
 model Budget {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
   income      Float
   allocations Json
   month       Int
   year        Int
-  date        DateTime
+  date        String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

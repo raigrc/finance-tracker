@@ -1,5 +1,5 @@
 import { ChartConfig } from "@/components/ui/chart";
-import { Budget, Transaction } from "@prisma/client";
+import { Budget, Transaction, User } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 
 export interface AuthHeaderProps {
@@ -31,8 +31,8 @@ export interface CardDashboardProps {
   headerTitle: string;
   headerIcon: React.ReactNode;
   content: string | number;
-  footerTitle: string;
-  footerValue: string | number;
+  footerTitle?: string;
+  footerValue?: string | number;
   iconColor?: string;
 }
 
@@ -80,4 +80,8 @@ export interface FilterProps {
   onFilterChange: (filter: any) => void;
   icon: React.ReactNode;
   budgets?: Budget[];
+}
+
+export interface UserBudgetProps {
+  totalMoney: number;
 }
