@@ -19,18 +19,17 @@ enum UserRole {
 }
 
 model User {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?       @unique
-  image         String?
-  password      String?
-  role          UserRole      @default(USER)
-  totalMoney    Float?
-  accounts      Account[]
-  sessions      Session[]
-  Transaction   Transaction[]
-  Budget        Budget[]
-  emailVerified DateTime?
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  email       String?       @unique
+  image       String?
+  password    String?
+  role        UserRole      @default(USER)
+  totalMoney  Float?
+  accounts    Account[]
+  sessions    Session[]
+  Transaction Transaction[]
+  Budget      Budget[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,9 +75,13 @@ model Transaction {
   category    String
   type        TransactionType
   description String?
-  month       Int
-  year        Int
-  date        DateTime        @default(now())
+  subcategory String?
+  isRecurring Boolean         @default(false)
+  receiptUrl  String?
+  frequency   String? // 'daily', 'weekly', 'monthly', 'yearly'
+  month       Int?
+  year        Int?
+  date        DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -87,18 +90,12 @@ model Transaction {
 }
 
 model Budget {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String @db.ObjectId
-  overallMoney      Float
-  totalAmount       Float
-  needsPercentage   Float
-  wantsPercentage   Float
-  savingsPercentage Float
-  needsAmount       Float
-  wantsAmount       Float
-  savingsAmount     Float
-  month             Int
-  year              Int
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  income      Float
+  allocations Json
+  month       Int
+  year        Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -107,6 +104,6 @@ model Budget {
 }
 
 enum TransactionType {
-  INCOME
-  EXPENSE
+  Income
+  Expense
 }
