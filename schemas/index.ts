@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { date, z } from "zod";
 
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
@@ -31,11 +31,18 @@ export const TransactionSchema = z.object({
 });
 
 export const BudgetSchema = z.object({
-  userId: z.string(),
-  totalAmount: z.coerce.number().min(1),
-  needsPercentage: z.coerce.number().min(0).max(100),
-  wantsPercentage: z.coerce.number().min(0).max(100),
-  savingsPercentage: z.coerce.number().min(0).max(100),
-  month: z.coerce.number().min(1).max(12),
-  year: z.coerce.number(),
+  date: z.string(),
+  month: z.coerce.number({ message: "Invalid Month!" }).min(1).max(12),
+  year: z.coerce.number({ message: "Invalid format!" }),
+  income: z.coerce.number().min(1),
+  allocations: z.object({
+    Savings: z.coerce.number().min(1).max(100),
+    Needs: z.coerce.number().min(1).max(100),
+    Wants: z.coerce.number().min(1).max(100),
+  }),
+  // FOR FUTURE FEATURES
+  // subCategory: z.object({
+  //   Needs: z.record(z.string(), z.coerce.number().min(1).max(100)),
+  //   Wants: z.record(z.string(), z.coerce.number().min(1).max(100)),
+  // }),
 });

@@ -45,9 +45,16 @@ const NavBar = () => {
             </Link>
             <Link href="/goals">
               <NavigationMenuLink
-                className={` bg- ${navigationMenuTriggerStyle()} ${pathname.includes("/budgets") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+                className={`bg- ${navigationMenuTriggerStyle()} ${pathname.includes("/goals") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
               >
                 Goals
+              </NavigationMenuLink>
+            </Link>
+            <Link href="/reports">
+              <NavigationMenuLink
+                className={`bg- ${navigationMenuTriggerStyle()} ${pathname.includes("/reports") ? "bg-background text-primary" : "bg-background/15 text-slate-400"}`}
+              >
+                Reports
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

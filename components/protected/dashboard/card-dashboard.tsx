@@ -29,11 +29,11 @@ const CardDashboard = ({
       <CardContent>
         <h1 className="text-2xl">{content}</h1>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <CardDescription>
-          {footerTitle}: <span>{footerValue}</span>
+          {footerTitle} <span>{footerValue}</span>
         </CardDescription>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

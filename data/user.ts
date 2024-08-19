@@ -42,3 +42,14 @@ export const getCurrentTotalMoney = async (id: string) => {
 
   return currentTotal;
 };
+
+export const getUserTotalMoney = async (id: string) => {
+  const currentTotal = await prisma.user.findFirst({
+    where: {
+      id,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return currentTotal;
+};
