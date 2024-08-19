@@ -83,5 +83,13 @@ export interface FilterProps {
 }
 
 export interface UserBudgetProps {
-  totalMoney: number;
+  balance: number;
+  income: number;
+  savings: number;
+}
+
+export interface Allocations {
+  Savings: number;
+  Needs: number;
+  Wants: number;
 }
