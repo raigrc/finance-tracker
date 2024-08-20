@@ -1,4 +1,4 @@
-import { date, z } from "zod";
+import { z } from "zod";
 
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
@@ -19,7 +19,6 @@ export const RegisterSchema = z.object({
 });
 
 export const TransactionSchema = z.object({
-  userId: z.string(),
   amount: z.coerce
     .number({ message: "Invalid format!" })
     .min(1, { message: "Amount is required" }),
@@ -28,6 +27,10 @@ export const TransactionSchema = z.object({
   month: z.coerce.number().min(1).max(12),
   year: z.coerce.number(),
   description: z.string().optional(),
+  recurring: z.boolean(),
+  frequency: z.enum(["Daily", "Weekly", "Montly", "Yearly"], {
+    message: "Please select frequency",
+  }),
 });
 
 export const BudgetSchema = z.object({

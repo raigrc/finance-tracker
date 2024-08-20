@@ -23,100 +23,101 @@ export const transaction = async (
   const transactionData = TransactionSchema.safeParse(values);
 
   if (!transactionData.success) return { error: "Invalid Fields!" };
+  console.log({ transactionData });
 
-  const { userId, amount, category, type, month, year, description } =
-    transactionData.data;
+  // const { userId, amount, category, type, month, year, description } =
+  //   transactionData.data;
 
-  const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
-  if (!budgetThisMonth) return { error: "Cannot find budget for this month!" };
+  // const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
+  // if (!budgetThisMonth) return { error: "Cannot find budget for this month!" };
 
-  const currentMoney = await getCurrentTotalMoney(userId);
+  // const currentMoney = await getCurrentTotalMoney(userId);
 
-  if (!currentMoney) return { error: "Cannot find budget for this month!" };
+  // if (!currentMoney) return { error: "Cannot find budget for this month!" };
 
-  try {
-    if (type == "INCOME") {
-      switch (category) {
-        case "Needs": {
-          await updateIncomeNeeds(budgetThisMonth.id, amount);
-          await increaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        case "Savings": {
-          await updateIncomeSavings(budgetThisMonth.id, amount);
-          await increaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        case "Wants": {
-          await updateIncomeWants(budgetThisMonth.id, amount);
-          await increaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        default: {
-          return { error: "Category Error!" };
-        }
-      }
+  // try {
+  //   if (type == "INCOME") {
+  //     switch (category) {
+  //       case "Needs": {
+  //         await updateIncomeNeeds(budgetThisMonth.id, amount);
+  //         await increaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       case "Savings": {
+  //         await updateIncomeSavings(budgetThisMonth.id, amount);
+  //         await increaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       case "Wants": {
+  //         await updateIncomeWants(budgetThisMonth.id, amount);
+  //         await increaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       default: {
+  //         return { error: "Category Error!" };
+  //       }
+  //     }
 
-      await prisma.transaction.create({
-        data: {
-          userId,
-          amount,
-          category,
-          type,
-          month,
-          year,
-          description,
-        },
-      });
-    } else {
-      switch (category) {
-        case "Needs": {
-          if (budgetThisMonth.needsAmount < amount)
-            return {
-              error: "Your budget this month cannot afford what you want!",
-            };
-          await updateExpenseNeeds(budgetThisMonth.id, amount);
-          await decreaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        case "Savings": {
-          if (budgetThisMonth.savingsAmount < amount)
-            return {
-              error: "Your budget this month cannot afford what you want!",
-            };
-          await updateExpenseSavings(budgetThisMonth.id, amount);
-          await decreaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        case "Wants": {
-          if (budgetThisMonth.wantsAmount < amount)
-            return {
-              error: "Your budget this month cannot afford what you want!",
-            };
-          await updateExpenseWants(budgetThisMonth.id, amount);
-          await decreaseTotalMoney(currentMoney.id, amount);
-          break;
-        }
-        default: {
-          return { error: "Category Error!" };
-        }
-      }
+  //     await prisma.transaction.create({
+  //       data: {
+  //         userId,
+  //         amount,
+  //         category,
+  //         type,
+  //         month,
+  //         year,
+  //         description,
+  //       },
+  //     });
+  //   } else {
+  //     switch (category) {
+  //       case "Needs": {
+  //         if (budgetThisMonth.needsAmount < amount)
+  //           return {
+  //             error: "Your budget this month cannot afford what you want!",
+  //           };
+  //         await updateExpenseNeeds(budgetThisMonth.id, amount);
+  //         await decreaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       case "Savings": {
+  //         if (budgetThisMonth.savingsAmount < amount)
+  //           return {
+  //             error: "Your budget this month cannot afford what you want!",
+  //           };
+  //         await updateExpenseSavings(budgetThisMonth.id, amount);
+  //         await decreaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       case "Wants": {
+  //         if (budgetThisMonth.wantsAmount < amount)
+  //           return {
+  //             error: "Your budget this month cannot afford what you want!",
+  //           };
+  //         await updateExpenseWants(budgetThisMonth.id, amount);
+  //         await decreaseTotalMoney(currentMoney.id, amount);
+  //         break;
+  //       }
+  //       default: {
+  //         return { error: "Category Error!" };
+  //       }
+  //     }
 
-      await prisma.transaction.create({
-        data: {
-          userId,
-          amount: -amount,
-          category,
-          type,
-          month,
-          year,
-          description,
-        },
-      });
-    }
+  //     await prisma.transaction.create({
+  //       data: {
+  //         userId,
+  //         amount: -amount,
+  //         category,
+  //         type,
+  //         month,
+  //         year,
+  //         description,
+  //       },
+  //     });
+  //   }
 
-    return { success: "Successful adding transaction!" };
-  } catch {}
+  //   return { success: "Successful adding transaction!" };
+  // } catch {}
 
-  console.log(transactionData);
+  // console.log(transactionData);
 };

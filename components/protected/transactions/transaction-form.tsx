@@ -30,30 +30,24 @@ import { z } from "zod";
 import { TransactionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transaction } from "@/actions/transaction";
-import { useSession } from "next-auth/react";
 import TransactionError from "./transaction-error";
 import TransactionSuccess from "./transaction-success";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const TransactionForm = () => {
-  const { data: session } = useSession();
   const [isPending, startTransition] = useTransition();
-  const [transactionError, setTransactionError] = useState<
-    string | undefined
-  >();
-  const [transactionSuccess, setTransactionSuccess] = useState<
-    string | undefined
-  >();
+  const [transactionError, setTransactionError] = useState<string>();
+  const [transactionSuccess, setTransactionSuccess] = useState<string>();
+
+  const [isRecurring, setIsRecurring] = useState<string>();
 
   const form = useForm<z.infer<typeof TransactionSchema>>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
-      userId: session?.user.id,
-      amount: undefined,
-      category: undefined,
+      amount: 0,
       type: "INCOME",
-      month: new Date().getMonth() + 1,
-      year: new Date(Date.now()).getFullYear(),
       description: "",
+      recurring: false,
     },
   });
 
@@ -65,6 +59,7 @@ const TransactionForm = () => {
       });
     });
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -72,13 +67,85 @@ const TransactionForm = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-xl">Add Transaction</DialogTitle>
-          <DialogDescription>This is a description</DialogDescription>
+          <DialogTitle className="text-center text-xl">
+            Add Transaction
+          </DialogTitle>
+          {/* <DialogDescription>This is a description</DialogDescription> */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-6 py-4"
             >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between space-x-3">
+                  <FormField
+                    control={form.control}
+                    name="month"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>Month</FormLabel>
+                        <FormControl>
+                          <Select
+                            disabled={isPending}
+                            // value={String(field.value)}
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Month" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from({ length: 12 }, (_, i) => (
+                                <SelectItem key={i} value={String(i + 1)}>
+                                  {new Date(0, i).toLocaleString("default", {
+                                    month: "long",
+                                  })}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="year"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>Year</FormLabel>
+                        <FormControl>
+                          <Select
+                            disabled={isPending}
+                            // value={String(field.value)}
+                            onValueChange={(value) => field.onChange(value)}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from({ length: 10 }, (_, i) => (
+                                <SelectItem
+                                  key={i}
+                                  value={String(
+                                    new Date(Date.now()).getFullYear() + i,
+                                  )}
+                                >
+                                  {new Date(Date.now()).getFullYear() + i}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -89,7 +156,9 @@ const TransactionForm = () => {
                       <FormControl>
                         <Select
                           value={field.value}
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                          }}
                           disabled={isPending}
                         >
                           <SelectTrigger>
@@ -152,77 +221,72 @@ const TransactionForm = () => {
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="month"
+                  name="recurring"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Month</FormLabel>
+                      <FormLabel>Recurring</FormLabel>
                       <FormControl>
-                        <Select
-                          disabled={isPending}
-                          // value={String(field.value)}
-                          onValueChange={(value) =>
-                            field.onChange(Number(value))
-                          }
+                        <RadioGroup
+                          className="flex items-center space-x-3"
+                          onValueChange={(value) => {
+                            field.onChange(value === "true");
+                            setIsRecurring(value);
+                          }}
+                          // defaultValue={String(field.value)}
                         >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Month" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">January</SelectItem>
-                            <SelectItem value="2">February</SelectItem>
-                            <SelectItem value="3">March</SelectItem>
-                            <SelectItem value="4">April</SelectItem>
-                            <SelectItem value="5">May</SelectItem>
-                            <SelectItem value="6">June</SelectItem>
-                            <SelectItem value="7">July</SelectItem>
-                            <SelectItem value="8">August</SelectItem>
-                            <SelectItem value="9">September</SelectItem>
-                            <SelectItem value="10">October</SelectItem>
-                            <SelectItem value="11">November</SelectItem>
-                            <SelectItem value="12">December</SelectItem>
-                          </SelectContent>
-                        </Select>
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="true" />
+                            </FormControl>
+                            <FormLabel className="text-sm">Yes</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="false" />
+                            </FormControl>
+                            <FormLabel className="text-sm">No</FormLabel>
+                          </FormItem>
+                        </RadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Year</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={isPending}
-                          value={String(field.value)}
-                          onValueChange={(value) => field.onChange(value)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Year" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 10 }, (_, i) => (
-                              <SelectItem
-                                key={i}
-                                value={String(
-                                  new Date(Date.now()).getFullYear() + i,
-                                )}
-                              >
-                                {new Date(Date.now()).getFullYear() + i}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+
+              {isRecurring === "true" && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="frequency"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Select
+                            value={field.value}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select frequency" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Daily">Daily</SelectItem>
+                              <SelectItem value="Weekly">Weekly</SelectItem>
+                              <SelectItem value="Monthly">Monthly</SelectItem>
+                              <SelectItem value="Yearly">Yearly</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -230,7 +294,7 @@ const TransactionForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Description{" "}
+                        Description
                         <span className="text-gray-400 opacity-50">
                           (optional)
                         </span>

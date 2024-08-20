@@ -74,6 +74,11 @@ model Transaction {
   isRecurring Boolean         @default(false)
   receiptUrl  String?
   frequency   String? // 'daily', 'weekly', 'monthly', 'yearly'
+  startMonth  Int?
+  startYear   Int?
+  endMonth    Int?
+  endYear     Int?
+  day         Int?
   month       Int?
   year        Int?
   date        DateTime
@@ -85,13 +90,13 @@ model Transaction {
 }
 
 model Budget {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
   income      Float
   allocations Json
   month       Int
   year        Int
-  date        String
+  date        DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

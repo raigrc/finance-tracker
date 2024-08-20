@@ -21,7 +21,7 @@ export const GET = async () => {
         income: true,
       },
     });
-    const income = incomeData._sum.income || 0;
+    const incomeThisMonth = incomeData._sum.income || 0;
 
     //GET SAVINGS
     const budget = await prisma.budget.findFirst({
@@ -32,14 +32,19 @@ export const GET = async () => {
     const savingAllocation = allocations?.Savings;
 
     if (!savingAllocation) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Allocation not found" },
+        { status: 404 },
+      );
     }
 
-    const savings = (income * savingAllocation) / 100;
+    const savingsThisMonth = (incomeThisMonth * savingAllocation) / 100;
 
-    console.log(savings);
-
-    return NextResponse.json({ balance, income, savings });
+    return NextResponse.json({
+      balance,
+      income: incomeThisMonth,
+      savings: savingsThisMonth,
+    });
   } catch (error) {
     console.error("Error fetching user data", error);
     return NextResponse.json(
