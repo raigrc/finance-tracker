@@ -16,7 +16,7 @@ const UserDashboardSummary = () => {
     const fetchData = async (id: string) => {
       try {
         const response = await fetch(`/api/user_summary`);
-        if (!response.ok) setError("Failed to fetch user data");
+        if (!response.ok) throw new Error("Failed to fetch user data");
 
         const data = await response.json();
 
@@ -24,7 +24,7 @@ const UserDashboardSummary = () => {
         setIncome(data.income);
         setSavings(data.savings);
       } catch (error) {
-        setError("Failed to fetch user data");
+        setError((error as Error).message || "Failed to fetch user data");
         console.error("Error: ", error);
       } finally {
         setLoading(false);
@@ -36,8 +36,8 @@ const UserDashboardSummary = () => {
   }, [session]);
 
   if (loading) return <h1>Loading...</h1>;
-  if (!balance || !income || !savings) return <h1>Money not found</h1>;
   if (error) return <h1>Error loading data</h1>;
+  if (!balance || !income || !savings) return <h1>Money not found</h1>;
 
   return (
     <DashboardSummary balance={balance} income={income} savings={savings} />

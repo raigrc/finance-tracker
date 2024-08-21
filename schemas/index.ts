@@ -31,6 +31,7 @@ export const TransactionSchema = z.object({
   frequency: z.enum(["Daily", "Weekly", "Montly", "Yearly"], {
     message: "Please select frequency",
   }),
+  endMonth: z.date(),
 });
 
 export const BudgetSchema = z.object({
