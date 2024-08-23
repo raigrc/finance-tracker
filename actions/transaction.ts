@@ -3,7 +3,11 @@
 import { TransactionSchema } from "@/schemas";
 import { z } from "zod";
 import { getBudgetThisMonth } from "@/data/budget";
-import { getCurrentTotalMoney } from "@/data/user";
+import {
+  getCurrentTotalMoney,
+  getUserBalance,
+  getUserIncome,
+} from "@/data/user";
 import {
   decreaseTotalMoney,
   increaseTotalMoney,
@@ -16,20 +20,109 @@ import {
 } from "@/data/transactions";
 import { prisma } from "@/lib/prisma";
 import { error } from "console";
+import { auth } from "@/auth";
+import { eachWeekOfInterval, endOfYear, format, formatISO } from "date-fns";
 
 export const transaction = async (
   values: z.infer<typeof TransactionSchema>,
 ) => {
+  const session = await auth();
+  const userId = session?.user.id as string;
+  if (!session?.user && userId) return { error: "Unauthorized!" };
   const transactionData = TransactionSchema.safeParse(values);
 
   if (!transactionData.success) return { error: "Invalid Fields!" };
   console.log({ transactionData });
+  const {
+    date,
+    amount,
+    category,
+    type,
+    month,
+    year,
+    description,
+    recurring,
+    frequency,
+    startDate,
+    endDate,
+  } = transactionData.data;
 
-  // const { userId, amount, category, type, month, year, description } =
-  //   transactionData.data;
+  const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
+  const balance = await getUserBalance(userId);
+  if (!balance) return { error: "Cannot fetch the money" };
+  const income = await getUserIncome(userId, month, year);
+  console.log(income);
+  if (!income) return { error: "Cannot fetch the income" };
+
+  try {
+    if (budgetThisMonth) {
+      await prisma.transaction.create({
+        data: {
+          userId,
+          amount,
+          category,
+          type,
+          month,
+          year,
+          description,
+          isRecurring: recurring,
+          frequency,
+          startDate,
+          endDate,
+          date,
+        },
+      });
+      if (type === "Income") {
+        await prisma.user.update({
+          where: { id: userId },
+          data: {
+            totalMoney: balance + amount,
+          },
+        });
+
+        await prisma.budget.update({
+          where: { userId, month, year },
+          data: { income: income + amount },
+        });
+      } else if (type === "Expense") {
+        await prisma.user.update({
+          where: { id: userId },
+          data: {
+            totalMoney: balance - amount,
+          },
+        });
+      } else {
+        return { error: "Invalid type input!" };
+      }
+
+      // await prisma.transaction.create({
+      //   data: {
+      //     userId,
+      //     amount,
+      //     category,
+      //     type,
+      //     month,
+      //     year,
+      //     description,
+      //     isRecurring: recurring,
+      //     frequency,
+      //     startDate,
+      //     endDate,
+      //     date,
+      //   },
+      // });
+      return { success: "Successfully added transaction" };
+    } else {
+      return { error: "There is no budget this month!" };
+    }
+  } catch (error) {
+    console.error("An error has occured!", error);
+  }
 
   // const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
-  // if (!budgetThisMonth) return { error: "Cannot find budget for this month!" };
+  // if (!budgetThisMonth) {
+  //   return { error: "Cannot find budget for this month!" };
+  // }
 
   // const currentMoney = await getCurrentTotalMoney(userId);
 

@@ -43,13 +43,28 @@ export const getCurrentTotalMoney = async (id: string) => {
   return currentTotal;
 };
 
-export const getUserTotalMoney = async (id: string) => {
-  const currentTotal = await prisma.user.findFirst({
+export const getUserBalance = async (id: string) => {
+  const user = await prisma.user.findFirst({
     where: {
       id,
     },
     orderBy: { createdAt: "desc" },
   });
 
-  return currentTotal;
+  const balance = user?.totalMoney;
+  return balance;
+};
+
+export const getUserIncome = async (
+  id: string,
+  month: number,
+  year: number,
+) => {
+  const user = await prisma.budget.findFirst({
+    where: { userId: id, month, year },
+  });
+
+  const income = user?.income;
+
+  return income;
 };

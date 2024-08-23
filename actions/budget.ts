@@ -5,8 +5,8 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getBudgetThisMonth } from "@/data/budget";
 import { monthNow, yearNow } from "@/lib/dates";
-import { getUserTotalMoney } from "@/data/user";
 import { auth } from "@/auth";
+import { getUserBalance } from "@/data/user";
 
 export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   const session = await auth();
@@ -24,9 +24,8 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
   if (budgetThisMonth) return { error: "You already have budget this month!" };
 
-  const user = await getUserTotalMoney(userId);
-  if (!user || user?.totalMoney === null)
-    return { error: "Cannot fetch the money" };
+  const balance = await getUserBalance(userId);
+  if (!balance) return { error: "Cannot fetch the money" };
 
   if (month < monthNow && year === yearNow)
     return { error: "You cannot add budget on the past month!" };
@@ -48,7 +47,7 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
         id: userId,
       },
       data: {
-        totalMoney: user.totalMoney + income,
+        totalMoney: balance + income,
       },
     });
     return { success: "Successfully added budget" };

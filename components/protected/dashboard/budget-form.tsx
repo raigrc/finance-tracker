@@ -45,7 +45,7 @@ const BudgetForm = () => {
   const form = useForm<z.infer<typeof BudgetSchema>>({
     resolver: zodResolver(BudgetSchema),
     defaultValues: {
-      date: new Date().toISOString().slice(0, 7),
+      date: new Date(),
       income: 0,
       allocations: {
         Savings: 20,

@@ -3,9 +3,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import authConfig from "@/auth.config";
 import { Budget, Transaction } from "@prisma/client";
-import { getAllBudgetByUserId, getTotalBudgetByUserId } from "./data/budget";
+// import { getAllBudgetByUserId } from "./data/budget";
 import { BudgetSummary } from "./types";
-import { getAllTransactionsByUserId } from "./data/transactions";
+// import { getAllTransactionsByUserId } from "./data/transactions";
 
 declare module "next-auth" {
   interface Session {

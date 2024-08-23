@@ -38,9 +38,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
+import {
+  eachWeekOfInterval,
+  endOfYear,
+  format,
+  getDate,
+  getDay,
+  getMonth,
+  isAfter,
+  isBefore,
+} from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { FaCalendarAlt } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const TransactionForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -49,14 +59,18 @@ const TransactionForm = () => {
 
   const [isRecurring, setIsRecurring] = useState<string>();
   const [frequency, setFrequency] = useState<string>();
+  const [type, setType] = useState<string>();
 
   const form = useForm<z.infer<typeof TransactionSchema>>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
+      date: new Date(),
       amount: 0,
-      type: "INCOME",
+      type: "Income",
       description: "",
-      recurring: false,
+      // recurring: false,
+      startDate: new Date(),
+      endDate: undefined,
     },
   });
 
@@ -69,12 +83,18 @@ const TransactionForm = () => {
     });
   };
 
+  const disabledDate = (date: Date) => {
+    if (frequency === "Weekly") {
+      console.log("Weekly!");
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button>Add Transaction</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-screen overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center text-xl">
             Add Transaction
@@ -167,6 +187,7 @@ const TransactionForm = () => {
                           value={field.value}
                           onValueChange={(value) => {
                             field.onChange(value);
+                            setType(value);
                           }}
                           disabled={isPending}
                         >
@@ -174,8 +195,8 @@ const TransactionForm = () => {
                             <SelectValue placeholder="Select Type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="INCOME">Income</SelectItem>
-                            <SelectItem value="EXPENSE">Expense</SelectItem>
+                            <SelectItem value="Income">Income</SelectItem>
+                            <SelectItem value="Expense">Expense</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -199,34 +220,36 @@ const TransactionForm = () => {
                   )}
                 />
               </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          disabled={isPending}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Needs">Needs</SelectItem>
-                            <SelectItem value="Wants">Wants</SelectItem>
-                            <SelectItem value="Savings">Savings</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              {type === "Expense" && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <FormControl>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            disabled={isPending}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Needs">Needs</SelectItem>
+                              <SelectItem value="Wants">Wants</SelectItem>
+                              <SelectItem value="Savings">Savings</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
 
               <div className="space-y-4">
                 <FormField
@@ -322,22 +345,27 @@ const TransactionForm = () => {
                       )}
                     />
                   </div>
+
                   <div className="space-y-4">
                     <FormField
                       control={form.control}
-                      name="endMonth"
+                      name="endDate"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormLabel className="w-1/4">End Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
-                                <Button variant="outline" className="w-full">
+                                <Button
+                                  variant="outline"
+                                  className={`w-1/2 ${!field.value ? "text-muted-foreground" : ""}`}
+                                >
                                   {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(field.value, "PP")
                                   ) : (
                                     <span>Pick a date</span>
                                   )}
-                                  <FaCalendarAlt />
+                                  <FaCalendarAlt className="ml-auto opacity-50" />
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
@@ -346,9 +374,26 @@ const TransactionForm = () => {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date < new Date(Date.now() - 1)
-                                }
+                                disabled={(date) => {
+                                  const today = new Date();
+                                  switch (frequency) {
+                                    case "Weekly": {
+                                      const currentDay = getDay(today);
+                                      const dayOfWeek = getDay(date);
+
+                                      if (currentDay !== dayOfWeek) return true;
+                                      break;
+                                    }
+                                    case "Monthly": {
+                                      const currentMonth = getDate(today);
+                                      const thisMonth = getDate(date);
+                                      if (currentMonth !== thisMonth)
+                                        return true;
+                                      break;
+                                    }
+                                  }
+                                  return date < today;
+                                }}
                                 initialFocus
                               />
                             </PopoverContent>

@@ -67,18 +67,15 @@ model Transaction {
   id          String          @id @default(auto()) @map("_id") @db.ObjectId
   userId      String          @db.ObjectId
   amount      Float
-  category    String
+  category    String?
   type        TransactionType
   description String?
   subcategory String?
   isRecurring Boolean         @default(false)
   receiptUrl  String?
   frequency   String? // 'daily', 'weekly', 'monthly', 'yearly'
-  startMonth  Int?
-  startYear   Int?
-  endMonth    Int?
-  endYear     Int?
-  day         Int?
+  startDate   DateTime?
+  endDate     DateTime?
   month       Int?
   year        Int?
   date        DateTime
@@ -102,6 +99,8 @@ model Budget {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId])
 }
 
 enum TransactionType {

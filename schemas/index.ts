@@ -22,20 +22,24 @@ export const TransactionSchema = z.object({
   amount: z.coerce
     .number({ message: "Invalid format!" })
     .min(1, { message: "Amount is required" }),
-  category: z.string({ message: "Category is required!" }),
-  type: z.enum(["INCOME", "EXPENSE"]),
+  category: z.string().optional(),
+  type: z.enum(["Income", "Expense"]),
   month: z.coerce.number().min(1).max(12),
   year: z.coerce.number(),
   description: z.string().optional(),
   recurring: z.boolean(),
-  frequency: z.enum(["Daily", "Weekly", "Montly", "Yearly"], {
-    message: "Please select frequency",
-  }),
-  endMonth: z.date(),
+  frequency: z
+    .enum(["Daily", "Weekly", "Montly", "Yearly"], {
+      message: "Please select frequency",
+    })
+    .optional(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  date: z.date(),
 });
 
 export const BudgetSchema = z.object({
-  date: z.string(),
+  date: z.date(),
   month: z.coerce.number({ message: "Invalid Month!" }).min(1).max(12),
   year: z.coerce.number({ message: "Invalid format!" }),
   income: z.coerce.number().min(1),
