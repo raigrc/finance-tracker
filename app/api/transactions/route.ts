@@ -12,17 +12,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const needs = url.searchParams.get("needs");
-  const wants = url.searchParams.get("wants");
-  const savings = url.searchParams.get("savings");
+  // const needs = url.searchParams.get("needs");
+  // const wants = url.searchParams.get("wants");
+  // const savings = url.searchParams.get("savings");
   const income = url.searchParams.get("income");
   const expense = url.searchParams.get("expense");
 
   const whereClause: any = { userId: session.user.id };
 
-  if (needs === "false") whereClause.category = { not: "Needs" };
-  if (wants === "false") whereClause.category = { not: "Wants" };
-  if (savings === "false") whereClause.category = { not: "Savings" };
+  // if (needs === "false") whereClause.category = { not: "Needs" };
+  // if (wants === "false") whereClause.category = { not: "Wants" };
+  // if (savings === "false") whereClause.category = { not: "Savings" };
   if (income === "false") whereClause.type = { not: "INCOME" };
   if (expense === "false") whereClause.type = { not: "EXPENSE" };
 

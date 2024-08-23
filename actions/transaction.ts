@@ -3,25 +3,9 @@
 import { TransactionSchema } from "@/schemas";
 import { z } from "zod";
 import { getBudgetThisMonth } from "@/data/budget";
-import {
-  getCurrentTotalMoney,
-  getUserBalance,
-  getUserIncome,
-} from "@/data/user";
-import {
-  decreaseTotalMoney,
-  increaseTotalMoney,
-  updateExpenseNeeds,
-  updateExpenseSavings,
-  updateExpenseWants,
-  updateIncomeNeeds,
-  updateIncomeSavings,
-  updateIncomeWants,
-} from "@/data/transactions";
+import { getUserBalance } from "@/data/user";
 import { prisma } from "@/lib/prisma";
-import { error } from "console";
 import { auth } from "@/auth";
-import { eachWeekOfInterval, endOfYear, format, formatISO } from "date-fns";
 
 export const transaction = async (
   values: z.infer<typeof TransactionSchema>,
@@ -50,12 +34,12 @@ export const transaction = async (
   const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
   const balance = await getUserBalance(userId);
   if (!balance) return { error: "Cannot fetch the money" };
-  const income = await getUserIncome(userId, month, year);
-  console.log(income);
-  if (!income) return { error: "Cannot fetch the income" };
 
   try {
     if (budgetThisMonth) {
+      const budgetId = budgetThisMonth.id;
+      const income = budgetThisMonth.income;
+
       await prisma.transaction.create({
         data: {
           userId,
@@ -81,7 +65,7 @@ export const transaction = async (
         });
 
         await prisma.budget.update({
-          where: { userId, month, year },
+          where: { id: budgetId },
           data: { income: income + amount },
         });
       } else if (type === "Expense") {
@@ -94,23 +78,6 @@ export const transaction = async (
       } else {
         return { error: "Invalid type input!" };
       }
-
-      // await prisma.transaction.create({
-      //   data: {
-      //     userId,
-      //     amount,
-      //     category,
-      //     type,
-      //     month,
-      //     year,
-      //     description,
-      //     isRecurring: recurring,
-      //     frequency,
-      //     startDate,
-      //     endDate,
-      //     date,
-      //   },
-      // });
       return { success: "Successfully added transaction" };
     } else {
       return { error: "There is no budget this month!" };

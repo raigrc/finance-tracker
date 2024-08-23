@@ -1,16 +1,13 @@
 import CardDashboard from "@/components/protected/dashboard/card-dashboard";
 import { FaCoins, FaMoneyBill, FaPiggyBank, FaWallet } from "react-icons/fa6";
 import { formatCurrency } from "@/lib/format-currency";
-import { getBudgetThisMonth, getTotalBudgetByUserId } from "@/data/budget";
-import { auth } from "@/auth";
-import { monthNow, yearNow } from "@/lib/dates";
 import { UserBudgetProps } from "@/types";
 
 const DashboardSummary = ({
   balance = 0,
   income = 0,
+  expenses = 0,
   savings = 0,
-  
 }: UserBudgetProps) => {
   return (
     <div className="flex justify-between space-x-3 pb-10">
@@ -30,7 +27,7 @@ const DashboardSummary = ({
         headerTitle={`Expense`}
         headerIcon={<FaWallet />}
         iconColor="bg-rose-500/75"
-        content={`${formatCurrency(2)}`}
+        content={`${formatCurrency(expenses)}`}
       />
       <CardDashboard
         headerTitle={`Savings`}

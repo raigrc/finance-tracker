@@ -85,6 +85,7 @@ export interface FilterProps {
 export interface UserBudgetProps {
   balance: number;
   income: number;
+  expenses: number;
   savings: number;
 }
 

@@ -99,8 +99,6 @@ model Budget {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([userId])
 }
 
 enum TransactionType {

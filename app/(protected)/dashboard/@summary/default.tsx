@@ -6,9 +6,10 @@ import React, { useEffect, useState } from "react";
 
 const DefaultUserDashboardSummary = () => {
   const { data: session } = useSession();
-  const [balance, setBalance] = useState<number | undefined>(undefined);
-  const [income, setIncome] = useState<number | undefined>(undefined);
-  const [savings, setSavings] = useState<number | undefined>(undefined);
+  const [balance, setBalance] = useState<number>(0);
+  const [income, setIncome] = useState<number>(0);
+  const [savings, setSavings] = useState<number>(0);
+  const [expenses, setExpenses] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,15 +17,16 @@ const DefaultUserDashboardSummary = () => {
     const fetchData = async (id: string) => {
       try {
         const response = await fetch(`/api/user_summary`);
-        if (!response.ok) setError("Failed to fetch user data");
+        if (!response.ok) throw new Error("Failed to fetch user data");
 
         const data = await response.json();
 
         setBalance(data.balance);
         setIncome(data.income);
         setSavings(data.savings);
+        setExpenses(data.expenses);
       } catch (error) {
-        setError("Failed to fetch user data");
+        setError((error as Error).message || "Failed to fetch user data");
         console.error("Error: ", error);
       } finally {
         setLoading(false);
@@ -36,11 +38,16 @@ const DefaultUserDashboardSummary = () => {
   }, [session]);
 
   if (loading) return <h1>Loading...</h1>;
-  if (!balance || !income || !savings) return <h1>Money not found</h1>;
   if (error) return <h1>Error loading data</h1>;
+  if (!balance || !income || !savings) return <h1>Money not found</h1>;
 
   return (
-    <DashboardSummary balance={balance} income={income} savings={savings} />
+    <DashboardSummary
+      balance={balance}
+      income={income}
+      expenses={expenses}
+      savings={savings}
+    />
   );
 };
 
