@@ -29,7 +29,7 @@ export const TransactionSchema = z.object({
   description: z.string().optional(),
   recurring: z.boolean(),
   frequency: z
-    .enum(["Daily", "Weekly", "Montly", "Yearly"], {
+    .enum(["Daily", "Weekly", "Monthly"], {
       message: "Please select frequency",
     })
     .optional(),

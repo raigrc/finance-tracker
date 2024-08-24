@@ -50,7 +50,6 @@ import {
 } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { FaCalendarAlt } from "react-icons/fa";
-import { cn } from "@/lib/utils";
 
 const TransactionForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -69,7 +68,7 @@ const TransactionForm = () => {
       type: "Income",
       description: "",
       // recurring: false,
-      startDate: new Date(),
+      startDate: undefined,
       endDate: undefined,
     },
   });
@@ -81,12 +80,6 @@ const TransactionForm = () => {
         setTransactionSuccess(data?.success);
       });
     });
-  };
-
-  const disabledDate = (date: Date) => {
-    if (frequency === "Weekly") {
-      console.log("Weekly!");
-    }
   };
 
   return (
@@ -336,7 +329,6 @@ const TransactionForm = () => {
                                 <SelectItem value="Daily">Daily</SelectItem>
                                 <SelectItem value="Weekly">Weekly</SelectItem>
                                 <SelectItem value="Monthly">Monthly</SelectItem>
-                                <SelectItem value="Yearly">Yearly</SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -345,7 +337,63 @@ const TransactionForm = () => {
                       )}
                     />
                   </div>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="startDate"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormLabel className="w-1/4">Start Date</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={`w-1/2 ${!field.value ? "text-muted-foreground" : ""}`}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <FaCalendarAlt className="ml-auto opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => {
+                                  const today = new Date();
+                                  switch (frequency) {
+                                    case "Weekly": {
+                                      const currentDay = getDay(today);
+                                      const dayOfWeek = getDay(date);
 
+                                      if (currentDay !== dayOfWeek) return true;
+                                      break;
+                                    }
+                                    case "Monthly": {
+                                      const currentMonth = getDate(today);
+                                      const thisMonth = getDate(date);
+                                      if (currentMonth !== thisMonth)
+                                        return true;
+                                      break;
+                                    }
+                                  }
+                                  return date < today;
+                                }}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="space-y-4">
                     <FormField
                       control={form.control}

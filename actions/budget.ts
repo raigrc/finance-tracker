@@ -24,8 +24,8 @@ export const budget = async (values: z.infer<typeof BudgetSchema>) => {
   const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
   if (budgetThisMonth) return { error: "You already have budget this month!" };
 
-  const balance = await getUserBalance(userId);
-  if (!balance) return { error: "Cannot fetch the money" };
+  const balance = (await getUserBalance(userId)) || 0;
+  if (balance === null) return { error: "Cannot fetch the money" };
 
   if (month < monthNow && year === yearNow)
     return { error: "You cannot add budget on the past month!" };
