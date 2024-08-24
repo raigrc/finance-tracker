@@ -6,6 +6,7 @@ import { getBudgetThisMonth } from "@/data/budget";
 import { getUserBalance } from "@/data/user";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { calculateNextOccurence } from "@/lib/calculate-next-occurence";
 
 export const transaction = async (
   values: z.infer<typeof TransactionSchema>,
@@ -29,12 +30,15 @@ export const transaction = async (
     frequency,
     startDate,
     endDate,
+    nextOccurrence,
   } = transactionData.data;
 
   const budgetThisMonth = await getBudgetThisMonth(userId, month, year);
   const balance = await getUserBalance(userId);
   if (!balance) return { error: "Cannot fetch the money" };
 
+  let next = nextOccurrence;
+  next = calculateNextOccurence(startDate as Date, frequency as string);
   try {
     if (budgetThisMonth) {
       const budgetId = budgetThisMonth.id;
@@ -53,6 +57,7 @@ export const transaction = async (
           frequency,
           startDate,
           endDate,
+          nextOccurrence: next,
           date,
         },
       });

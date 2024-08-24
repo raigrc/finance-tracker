@@ -35,6 +35,7 @@ export const TransactionSchema = z.object({
     .optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
+  nextOccurrence: z.date().optional(),
   date: z.date(),
 });
 
